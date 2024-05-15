@@ -1,0 +1,68 @@
+name: Code Quality
+
+on:
+  pull_request:
+    branches: [main]
+    types: [opened, synchronize, reopened, labeled]
+  push:
+    branches: [main]
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    name: Linting
+    steps:
+      - name: Checkout aries-mobile-agent-react-native
+        uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Setup NodeJS
+        uses: ./.github/actions/setup-node
+
+      - name: Install dependencies
+        run: |
+          yarn install --immutable
+
+      - name: Build Workspace
+        run: |
+          yarn lerna run build
+
+      - name: Check style
+        run: |
+          yarn run prettier
+
+      - name: LINTing
+        run: |
+          yarn run lint
+
+  test:
+    runs-on: ubuntu-latest
+    name: Testing
+    steps:
+      - name: Checkout aries-mobile-agent-react-native
+        uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Setup NodeJS
+        uses: ./.github/actions/setup-node
+
+      - name: Install dependencies
+        run: |
+          yarn install --immutable
+
+      - name: Build Workspace
+        run: |
+          yarn lerna run build
+
+      - name: Automated testing
+        run: |
+          yarn lerna run --stream test:coverage
+
+      - uses: codecov/codecov-action@v3
+        if: always()

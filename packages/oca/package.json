@@ -1,0 +1,48 @@
+{
+  "name": "@hyperledger/aries-oca",
+  "version": "1.0.0",
+  "description": "TypeScript implementation of Overlay Capture Architecture (OCA) for styling Aries Verifiable Credentials",
+  "main": "build/index.js",
+  "types": "build/index.d.ts",
+  "source": "src/index.ts",
+  "files": [
+    "src",
+    "build"
+  ],
+  "license": "Apache-2.0",
+  "scripts": {
+    "build": "yarn run clean && yarn run compile",
+    "clean": "rimraf ./build",
+    "compile": "tsc",
+    "prepublishOnly": "yarn run build",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hyperledger/aries-mobile-agent-react-native.git",
+    "directory": "packages/oca"
+  },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/",
+    "access": "public"
+  },
+  "bugs": {
+    "url": "https://github.com/hyperledger/aries-mobile-agent-react-native/issues"
+  },
+  "homepage": "https://github.com/hyperledger/aries-mobile-agent-react-native#readme",
+  "devDependencies": {
+    "@babel/runtime": "^7.20.0",
+    "@types/lodash.startcase": "^4.4.7",
+    "@typescript-eslint/parser": "^6.6.0",
+    "eslint": "^8.48.0",
+    "eslint-import-resolver-typescript": "^2.5.0",
+    "rimraf": "^5.0.0",
+    "typescript": "^5.0.4"
+  },
+  "dependencies": {
+    "@aries-framework/anoncreds": "^0.4.0",
+    "@aries-framework/core": "^0.4.0",
+    "axios": "^1.4.0",
+    "lodash.startcase": "^4.4.0"
+  }
+}
