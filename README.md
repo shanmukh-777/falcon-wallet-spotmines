@@ -34,7 +34,7 @@ Currently, we're updating Bifold's architecture to make it easier to maintain an
 
   3: Add mediator url
   
-  4: Start metro server at pckages/legacy/app by running react-native start --reset-cache
+  4: Start metro server at packages/legacy/app by running:  react-native start --reset-cache
 
 ### ----------->>>>  build commands:
 
