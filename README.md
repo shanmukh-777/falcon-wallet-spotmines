@@ -16,6 +16,36 @@ Join us as we work towards a future where verifiable credentials are easily acce
 
 Currently, we're updating Bifold's architecture to make it easier to maintain and customize for various use cases. Check out our [design roadmap issue](https://github.com/hyperledger/aries-mobile-agent-react-native/issues/754) for more information, and we welcome your feedback.
 
+### To get started
+
+# ----------->>>> required :
+
+  node 18.18.2
+  
+  jdk 17 or above
+  
+  npm 9
+
+# ----------->>>>  steps:
+
+  1: Execute command : yarn install in root folder
+  
+  2: Execute command:  yarn run  build 
+
+  3: Add mediator url
+  
+  4: Start metro server at pckages/legacy/app by running react-native start --reset-cache
+
+# ----------->>>>  build commands:
+
+To run the project: react-native start --reset-cache
+
+To clean the previous build:  ./gradlew clean
+
+To build an apk in release version: ./gradlew assembleRelease
+
+To build an apk in debug version: ./gradlew assembleDebug
+
 ## Contributing
 
 We warmly welcome contributions to the Bifold project! If you're interested in joining our community, please start by reading our [Contributor's Guide](./CONTRIBUTING).
