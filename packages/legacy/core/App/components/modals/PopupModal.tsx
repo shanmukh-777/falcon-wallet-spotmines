@@ -30,7 +30,8 @@ const PopupModal: React.FC<PopupModalProps> = ({
       flex: 1,
       justifyContent: 'center',
       alignItems: 'center',
-      backgroundColor: ColorPallet.notification.popupOverlay,
+      // backgroundColor: ColorPallet.notification.popupOverlay,
+      backgroundColor:"#F0F5FF",
       padding: 20,
     },
   })

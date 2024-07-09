@@ -68,7 +68,9 @@ const LocationScreen = ({ route }) => {
                     {selectedCountry && selectedCountry.name === 'India' && (
                         <View style={{width:'100%',position:'relative'}} >
                             {/* <Image source={aadhar} resizeMode="contain" className="w-full" /> */}
-                            <Aadhar width={"100%"} />
+                            <TouchableOpacity onPress={() => navigation.navigate(Screens.AadharScan)}>
+                                <Aadhar width={"100%"} />
+                            </TouchableOpacity>
                             <TextInput style={{position:'absolute',paddingHorizontal:2,color:'black',paddingVertical:1,right:'10%',width:'55%',top:'50%',fontSize:10,borderWidth:1,borderColor:'#5869E6',borderRadius:5}} placeholder='Enter AAdhar Number' maxLength={12} placeholderTextColor={"black"} />
                         </View>
                     )}
@@ -77,7 +79,7 @@ const LocationScreen = ({ route }) => {
 
 
                 {!isKeyboardVisible && (
-                    <TouchableOpacity  disabled={!selectedCountry}  style={{backgroundColor:selectedCountry?'#5869E6':'#B9B9B9', ...BUTTON_STYLE2 ,height:'8%',width:'90%',borderRadius:12,display:'flex',justifyContent:'center',alignItems:'center',marginBottom:'7%',padding:'2%'}} onPress={()=>{navigation.navigate(Screens.PersonalInfoScreen)}}>
+                    <TouchableOpacity  disabled={!selectedCountry}  style={{backgroundColor:selectedCountry?'#5869E6':'#B9B9B9', ...BUTTON_STYLE2 ,height:'8%',width:'90%',borderRadius:12,display:'flex',justifyContent:'center',alignItems:'center',marginBottom:'7%',padding:'2%'}} onPress={()=>{navigation.navigate(Screens.LivenessCheck)}}>
                         <Text style={{ fontSize: getFontSizel(),color:selectedCountry?'white':'#5F5F5F' }}>Confirm</Text>
                     </TouchableOpacity>
                 )}

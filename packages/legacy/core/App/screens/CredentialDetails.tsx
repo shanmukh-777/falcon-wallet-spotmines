@@ -418,6 +418,7 @@ const renderItem = ({ item }: { item: any }) => (
     //   />
     // </SafeAreaView>
     <SafeAreaView >
+      <ScrollView>
     <View style={{display:'flex',flexDirection:'row',width:'95%',marginHorizontal:'auto',justifyContent:'space-between',alignItems:'center'}}  >
         <View style={{display:'flex',flexDirection:'row',alignItems:'center'}} >
             <TouchableOpacity  style={{width:48,height:48,backgroundColor:'white',display:'flex',justifyContent:'center',alignItems:'center',borderRadius:8,margin:'8%',shadowColor: '#212228', shadowOffset: { width: 0, height: 4, }, shadowOpacity: 0.1,shadowRadius: 12, elevation: 4,}} onPress={navigation.goBack}>
@@ -427,7 +428,7 @@ const renderItem = ({ item }: { item: any }) => (
         </View>
         <View style={{display:'flex',flexDirection:'row',alignItems:'center',width:'20%',marginRight:'2%',justifyContent:'space-between'}} >
             <AntDesign name="delete" size={24} color="black" onPress={() => setmodalVisible(true)}  />
-            <Octicons name="eye-closed" size={24} color="black" onPress={()=>navigation.navigate(Screens.SelectSchemaScreen)} />
+            <Octicons name="eye-closed" size={24} color="black" />
         </View>
     </View>
     <FlatList
@@ -435,6 +436,7 @@ const renderItem = ({ item }: { item: any }) => (
         renderItem={renderItem}
         keyExtractor={item => item.id}
     />
+    </ScrollView>
 
     <Modal animationType="slide" transparent={true} visible={modalVisible}>
         <View style={{flex:1,justifyContent:'flex-end',alignItems:'center'}} >

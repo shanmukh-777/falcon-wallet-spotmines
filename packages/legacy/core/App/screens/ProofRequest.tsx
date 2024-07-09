@@ -1,4 +1,4 @@
-import type { StackScreenProps } from '@react-navigation/stack'
+import type { StackNavigationProp, StackScreenProps } from '@react-navigation/stack'
 
 import {
   AnonCredsCredentialsForProofRequest,
@@ -8,11 +8,11 @@ import {
 import { CredentialExchangeRecord, ProofState } from '@aries-framework/core'
 import { useConnectionById, useProofById } from '@aries-framework/react-hooks'
 import { Attribute, Predicate } from '@hyperledger/aries-oca/build/legacy'
-import { useIsFocused } from '@react-navigation/core'
+import { useIsFocused, useNavigation } from '@react-navigation/core'
 import moment from 'moment'
 import React, { useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { DeviceEventEmitter, FlatList, ScrollView, StyleSheet, Text, View } from 'react-native'
+import { DeviceEventEmitter, FlatList, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import Icon from 'react-native-vector-icons/MaterialIcons'
 
@@ -33,13 +33,15 @@ import { useTour } from '../contexts/tour/tour-context'
 import { useOutOfBandByConnectionId } from '../hooks/connections'
 import { useAllCredentialsForProof } from '../hooks/proofs'
 import { BifoldError } from '../types/error'
-import { NotificationStackParams, Screens, Stacks, TabStacks } from '../types/navigators'
+import { NotificationStackParams, Screens, Stacks, TabStackParams, TabStacks } from '../types/navigators'
 import { ProofCredentialAttributes, ProofCredentialItems, ProofCredentialPredicates } from '../types/proof-items'
 import { ModalUsage } from '../types/remove'
 import { TourID } from '../types/tour'
 import { useAppAgent } from '../utils/agent'
 import { getConnectionName, Fields, evaluatePredicates } from '../utils/helpers'
 import { testIdWithKey } from '../utils/testable'
+import ProofDocument from '../components/falcon/ProofDocument'
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 
 import ProofRequestAccept from './ProofRequestAccept'
 
@@ -388,7 +390,8 @@ const ProofRequest: React.FC<ProofRequestProps> = ({ navigation, route }) => {
 
     toggleDeclineModalVisible()
 
-    navigation.getParent()?.navigate(TabStacks.HomeStack, { screen: Screens.Home })
+    // navigation.getParent()?.navigate(TabStacks.HomeStack, { screen: Screens.Home })
+    navigation2.navigate(TabStacks.CredentialStack,{screen:Screens.ListCredentials})
   }
 
   const proofPageHeader = () => {
@@ -534,6 +537,10 @@ const ProofRequest: React.FC<ProofRequestProps> = ({ navigation, route }) => {
     items: ProofCredentialItems[]
   }
   const CredentialList: React.FC<CredentialListProps> = ({ header, footer, items }) => {
+useEffect(()=>{
+  console.log(items)
+})
+
     return (
       <FlatList
         data={items}
@@ -576,16 +583,26 @@ const ProofRequest: React.FC<ProofRequestProps> = ({ navigation, route }) => {
       />
     )
   }
+  const navigation2 = useNavigation<StackNavigationProp<TabStackParams>>()
+
 
   return (
     <SafeAreaView style={styles.pageContainer} edges={['bottom', 'left', 'right']}>
       <ScrollView>
         <View style={styles.pageContent}>
-          <CredentialList
+          {/* <CredentialList
             header={proofPageHeader()}
             footer={hasAvailableCredentials ? proofPageFooter() : undefined}
             items={activeCreds.filter((cred) => cred.credDefId !== undefined) ?? []}
-          />
+          /> */}
+          {/* <Document credential={activeCreds.filter((cred) => cred.credDefId !== undefined) ?? []} issueDate={credential.createdAt.toDateString()}  /> */}
+          <View style={{display:'flex',flexDirection:'row',alignItems:'center',height:'15%'}} >
+            <TouchableOpacity  style={{width:48,height:48,backgroundColor:'white',display:'flex',justifyContent:'center',alignItems:'center',borderRadius:8,margin:'5%',shadowColor: '#212228', shadowOffset: { width: 0, height: 4, }, shadowOpacity: 0.1,shadowRadius: 12, elevation: 4,}}  onPress={ ()=>{navigation2.navigate(TabStacks.CredentialStack,{screen:Screens.ListCredentials})}}>
+                <MaterialCommunityIcons name="arrow-left" size={24} color="black" />
+            </TouchableOpacity>
+            <Text style={{fontSize:16,fontWeight:'bold',color:'black',marginLeft:'4%'}} >Details</Text>
+        </View>
+          <ProofDocument credentials={activeCreds.filter((cred) => cred.credDefId !== undefined) ?? []} />
           {!hasAvailableCredentials && (
             <CredentialList
               header={
@@ -620,6 +637,7 @@ const ProofRequest: React.FC<ProofRequestProps> = ({ navigation, route }) => {
           )}
         </View>
         <ProofRequestAccept visible={pendingModalVisible} proofId={proofId} />
+        {proofPageFooter()}
         <CommonRemoveModal
           usage={ModalUsage.ProofRequestDecline}
           visible={declineModalVisible}

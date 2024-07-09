@@ -52,9 +52,11 @@ const InfoBox: React.FC<BifoldErrorProps> = ({
   const { showDetailsInfo } = useConfiguration()
   const styles = StyleSheet.create({
     container: {
-      backgroundColor: ColorPallet.brand.modalPrimaryBackground,
-      borderColor: ColorPallet.notification.infoBorder,
-      borderRadius: 5,
+      // backgroundColor: ColorPallet.brand.modalPrimaryBackground,
+      backgroundColor:'#F0F5FF',
+      // borderColor: ColorPallet.notification.infoBorder,
+      borderColor:'blue',
+      borderRadius: 20,
       borderWidth: 1,
       padding: 10,
       minWidth: width - 2 * 25,
@@ -79,10 +81,11 @@ const InfoBox: React.FC<BifoldErrorProps> = ({
       color: ColorPallet.notification.infoText,
     },
     bodyText: {
-      ...TextTheme.normal,
+      // ...TextTheme.normal,
       flexShrink: 1,
       marginVertical: 16,
-      color: ColorPallet.notification.infoText,
+      // color: ColorPallet.notification.infoText,
+      color:'red'
     },
     icon: {
       marginRight: 10,
@@ -103,8 +106,10 @@ const InfoBox: React.FC<BifoldErrorProps> = ({
       iconColor = ColorPallet.notification.infoIcon
       styles.container = {
         ...styles.container,
-        backgroundColor: ColorPallet.notification.info,
-        borderColor: ColorPallet.notification.infoBorder,
+        // backgroundColor: ColorPallet.notification.info,
+        // borderColor: ColorPallet.notification.infoBorder,
+        backgroundColor:'#F0F5FF',
+        borderColor:'red'
       }
       styles.headerText = {
         ...styles.headerText,
@@ -121,8 +126,10 @@ const InfoBox: React.FC<BifoldErrorProps> = ({
       iconColor = ColorPallet.notification.successIcon
       styles.container = {
         ...styles.container,
-        backgroundColor: ColorPallet.notification.success,
-        borderColor: ColorPallet.notification.successBorder,
+        // backgroundColor: ColorPallet.notification.success,
+        // borderColor: ColorPallet.notification.successBorder,
+        backgroundColor:'#F0F5FF',
+        borderColor:'red'
       }
       styles.headerText = {
         ...styles.headerText,
@@ -139,8 +146,10 @@ const InfoBox: React.FC<BifoldErrorProps> = ({
       iconColor = ColorPallet.notification.warnIcon
       styles.container = {
         ...styles.container,
-        backgroundColor: ColorPallet.notification.warn,
-        borderColor: ColorPallet.notification.warnBorder,
+        // backgroundColor: ColorPallet.notification.warn,
+        // borderColor: ColorPallet.notification.warnBorder,
+        backgroundColor:'#F0F5FF',
+        borderColor:'red'
       }
       styles.headerText = {
         ...styles.headerText,
@@ -157,8 +166,10 @@ const InfoBox: React.FC<BifoldErrorProps> = ({
       iconColor = ColorPallet.notification.errorIcon
       styles.container = {
         ...styles.container,
-        backgroundColor: ColorPallet.notification.error,
-        borderColor: ColorPallet.notification.errorBorder,
+        // backgroundColor: ColorPallet.notification.error,
+        // borderColor: ColorPallet.notification.errorBorder,
+        backgroundColor:'#F0F5FF',
+        borderColor:'red'
       }
       styles.headerText = {
         ...styles.headerText,

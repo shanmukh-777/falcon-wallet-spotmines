@@ -42,11 +42,12 @@ import { getAgentModules, createLinkSecretIfRequired } from '../utils/agent'
 import { migrateToAskar, didMigrateToAskar } from '../utils/migration'
 import Wa1 from '../assets/icons/wa1.svg'
 import Wa2 from '../assets/icons/wa2.svg'
+import { use } from 'i18next'
 
 
 
 const onboardingComplete = (state: StoreOnboardingState): boolean => {
-  console.log("in onbaording complete function")
+  console.log("onboarding complete function called")
   return state.didCompleteTutorial && state.didAgreeToTerms && state.didCreatePIN && state.didConsiderBiometry
 }
 
@@ -56,7 +57,7 @@ const resumeOnboardingAt = (
   enableWalletNaming: boolean | undefined,
   showPreface: boolean | undefined
 ): Screens => {
-  console.log("in resumeOnboarding at function")
+  console.log("resume onboarding function called")
   if (
     (state.didSeePreface || !showPreface) &&
     state.didCompleteTutorial &&
@@ -168,7 +169,7 @@ const WalletAnimationScreen: React.FC = () => {
     }
 
     const initOnboarding = async (): Promise<void> => {
-      console.log("in ininitOnboarding at function")
+      console.log("init onboarding function called")
       try {
         // load authentication attempts from storage
         const attemptData = await loadAuthAttempts()
@@ -285,7 +286,7 @@ const WalletAnimationScreen: React.FC = () => {
     }
 
     const initAgent = async (): Promise<void> => {
-      console.log("in initagent function")
+      console.log("init agent function calked")
       try {
         const credentials = await getWalletCredentials()
 
@@ -334,12 +335,12 @@ const WalletAnimationScreen: React.FC = () => {
         await createLinkSecretIfRequired(newAgent)
 
         setAgent(newAgent)
-        // navigation.dispatch(
-        //   CommonActions.reset({
-        //     index: 0,
-        //     routes: [{ name: Stacks.TabStack }],
-        //   })
-        // )
+        navigation.dispatch(
+          CommonActions.reset({
+            index: 0,
+            routes: [{ name: Stacks.TabStack }],
+          })
+        )
       } catch (err: unknown) {
         const error = new BifoldError(
           t('Error.Title1045'),
@@ -385,23 +386,50 @@ const WalletAnimationScreen: React.FC = () => {
 
 
   return (
-    <View style={{ backgroundColor: '#F0F5FF', width: '100%', height: '100%', position: 'relative' }}>
-      <View style={{ width: '100%', height: '80%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-        {/* <Image source={animation} resizeMode='contain' /> */}
-        {/* //<Animation /> */}
-        <Animated.View style={{ position: 'absolute', top: '30%', transform: [{ translateY: wa1Position }] }}>
-        <Wa1 width={250} height={250} />
-      </Animated.View>
-      <Animated.View style={{ position: 'absolute',bottom:'5%', transform: [{ translateY: wa2Position }] }}>
-        <Wa2 width={300} height={300} />
-      </Animated.View>
+    <>
+    {!store.onboarding.didSeePreface ?  (
+       
+      <View style={{ backgroundColor: '#F0F5FF', width: '100%', height: '100%', position: 'relative' }}>
+        <View style={{ width: '100%', height: '80%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+          {/* <Image source={animation} resizeMode='contain' /> */}
+          {/* <Animation /> */}
+          <Animated.View style={{ position: 'absolute', top: '30%', transform: [{ translateY: wa1Position }] }}>
+            <Wa1 width={250} height={250} />
+          </Animated.View>
+          <Animated.View style={{ position: 'absolute', bottom: '5%', transform: [{ translateY: wa2Position }] }}>
+            <Wa2 width={300} height={300} />
+          </Animated.View>
+          
+        </View>
+       
+        <View style={{ position: 'absolute', left: 0, right: 0, bottom: '20%' }}>
+          <LoadingIndicator />
+          <Text style={{ alignSelf: 'center', color: '#5869E6' }}>Creating your wallet</Text>
+        </View>
       </View>
-      <View style={{ position: 'absolute', left: 0, right: 0, bottom: '20%' }}>
-        <LoadingIndicator />
-        <Text style={{ alignSelf: 'center', color: '#5869E6' }}>Creating your wallet</Text>
-      </View>
-    </View>
-  )
+    )
+  
+  :(
+  <View style={{ backgroundColor: '#F0F5FF', width: '100%', height: '100%', position: 'relative' }}>
+  <View style={{ width: '100%', height: '80%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+    {/* <Image source={animation} resizeMode='contain' /> */}
+    {/* <Animation /> */}
+    <Animated.View style={{ position: 'absolute', top: '30%', transform: [{ translateY: wa1Position }] }}>
+      <Wa1 width={250} height={250} />
+    </Animated.View>
+    <Animated.View style={{ position: 'absolute', bottom: '5%', transform: [{ translateY: wa2Position }] }}>
+      <Wa2 width={300} height={300} />
+    </Animated.View>
+  </View>
+
+  <View style={{ position: 'absolute', left: 0, right: 0, bottom: '20%' }}>
+    <LoadingIndicator />
+    <Text style={{ alignSelf: 'center', color: '#5869E6' }}>loading your wallet</Text>
+  </View>
+</View>)}
+</>
+)
 }
+
 
 export default WalletAnimationScreen

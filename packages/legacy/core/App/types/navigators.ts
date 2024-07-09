@@ -49,7 +49,13 @@ export enum Screens {
   SelectSchemaScreen='select schema',
   RecoveryPhraseScreen='recovey screen',
   WalletAnimationScreen='wallet animation',
-  SupportScreen="support"
+  SupportScreen="support",
+  Networks='networks',
+  ListCredentials='list credential',
+  LivenessCheck=' liveness checkk',
+  AadharScan='Aadhar Scan',
+  ImportFile='import backup file',
+  RecoverWalletScreen='recover wallet'
 }
 
 export enum Stacks {
@@ -69,7 +75,9 @@ export enum TabStacks {
   ConnectStack = 'Tab Connect Stack',
   CredentialStack = 'Tab Credential Stack',
   SettingStack='Tab Settings Stack',
-  ListContacts='list credentials'
+  ListContacts='list credentials',
+  ListCredentials='list credentials'
+
 }
 
 export type RootStackParams = {
@@ -104,11 +112,15 @@ export type AuthenticateStackParams = {
   [Screens.EnterPIN]: { setAuthenticated: (status: boolean) => void } | undefined
   [Screens.UseBiometry]: undefined
   [Screens.NameWallet]: undefined
+  [Screens.CredentialDetails]:{ credential: any }
 }
 
 export type OnboardingStackParams = {
   [Screens.Onboarding]: undefined
   [Screens.Developer]: undefined
+  [Screens.GeoLocationScreen]: undefined
+  [Screens.LocationScreen]: undefined
+
 }
 
 export type ContactStackParams = {
@@ -121,6 +133,7 @@ export type ContactStackParams = {
   [Screens.CredentialOffer]: { credentialId: string }
   [Screens.ProofDetails]: { recordId: string; isHistory?: boolean }
   [Screens.ProofRequest]: { proofId: string }
+  [Screens.ListCredentials]:undefined
 }
 
 export type ProofRequestsStackParams = {
@@ -141,6 +154,7 @@ export type CredentialStackParams = {
   [Screens.Credentials]: undefined
   [Screens.CredentialDetails]: { credential: CredentialExchangeRecord }
   [Screens.SelectSchemaScreen]:undefined
+  [Screens.ListCredentials]: undefined
 }
 
 export type HomeStackParams = {
@@ -166,6 +180,7 @@ export type SettingStackParams = {
   [Screens.Developer]: undefined
   [Screens.RecoveryPhraseScreen]:undefined
   [Screens.SupportScreen]:undefined
+  [Screens.Networks]:undefined
 }
 
 export type NotificationStackParams = {

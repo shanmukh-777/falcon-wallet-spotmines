@@ -12,6 +12,7 @@ import VerifierCredentialCard from '../../components/misc/VerifierCredentialCard
 import { useAnimatedComponents } from '../../contexts/animated-components'
 import { useTheme } from '../../contexts/theme'
 import { buildFieldsFromSharedAnonCredsProof } from '../../utils/oca'
+import VerifiedProof from '../../components/falcon/VerifiedProof'
 
 interface SharedProofDataProps {
   recordId: string
@@ -24,16 +25,24 @@ const SharedDataCard: React.FC<{ sharedData: GroupedSharedProofDataItem }> = ({ 
   useEffect(() => {
     const attributes = buildFieldsFromSharedAnonCredsProof(sharedData.data)
     setAttributes(attributes)
+    console.log(attributes)
+    console.log(sharedData.identifiers)
+
   }, [sharedData])
 
   return (
     <View style={{ marginBottom: 15 }}>
-      <VerifierCredentialCard
+      {/* <VerifierCredentialCard
         displayItems={attributes}
         style={{ backgroundColor: ColorPallet.brand.secondaryBackground }}
         credDefId={sharedData.identifiers.cred_def_id}
         schemaId={sharedData.identifiers.schema_id}
         elevated
+      /> */}
+       <VerifiedProof
+        displayItems={attributes}
+        credDefId={sharedData.identifiers.cred_def_id}
+        schemaId={sharedData.identifiers.schema_id}
       />
     </View>
   )
@@ -73,6 +82,7 @@ const SharedProofData: React.FC<SharedProofDataProps> = ({ recordId, onSharedPro
       .finally(() => {
         setLoading(false)
       })
+      console.log(sharedData)
   }, [recordId])
 
   return (

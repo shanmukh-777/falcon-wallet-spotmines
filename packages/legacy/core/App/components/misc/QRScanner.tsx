@@ -64,7 +64,7 @@ const QRScanner: React.FC<Props> = ({ handleCodeScan, error, enableCameraOnError
     },
     iconContainer: {
       flexDirection: 'row',
-      justifyContent: 'space-between',
+      justifyContent: 'flex-end',
       width: '100%',
       paddingHorizontal: '10%',
       position: 'absolute',
@@ -187,9 +187,9 @@ const { height: screenHeight } = Dimensions.get('window');
           )}
         </View> */}
          <View style={styles.iconContainer}>
-                    <TouchableOpacity style={styles.iconButton} >
+                    {/* <TouchableOpacity style={styles.iconButton} >
                     <Qr/>
-                    </TouchableOpacity>
+                    </TouchableOpacity> */}
                     <TouchableOpacity style={styles.crossButton} onPress={()=>navigation.goBack()}>
                         <Ionicons name="close" size={24} color="black" />
                     </TouchableOpacity>

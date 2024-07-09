@@ -83,6 +83,7 @@ export const ChatMessage: React.FC<ChatMessageProps> = ({ messageProps }) => {
   return (
     <View
       style={{
+       
         flexDirection: 'row',
         justifyContent: message.user._id === Role.me ? 'flex-end' : 'flex-start',
       }}
@@ -90,6 +91,7 @@ export const ChatMessage: React.FC<ChatMessageProps> = ({ messageProps }) => {
       <View
         style={{
           ...theme.containerStyle,
+        
         }}
       >
         <Bubble
@@ -105,35 +107,36 @@ export const ChatMessage: React.FC<ChatMessageProps> = ({ messageProps }) => {
             },
           }}
           wrapperStyle={{
-            left: { ...theme.leftBubble, marginRight: 0, marginLeft: 0 },
-            right: { ...theme.rightBubble, marginLeft: 0, marginRight: 0 },
+            left: {  marginRight: 0, marginLeft: 0 ,borderRadius:12,padding:'5%',backgroundColor:'#F0F5FF'},  //style for text messa
+            right: {  marginLeft: 0, marginRight: 0,borderRadius:12,padding:'5%',backgroundColor:'#733DF5'},
           }}
           textStyle={{
             left: { ...theme.leftText },
-            right: { ...theme.rightText },
+            right: {...theme.rightText},
           }}
-          renderTime={() => <MessageTime message={message} />}
+          // renderTime={() => <MessageTime message={message} />}
           renderCustomView={() =>
-            message.messageOpensCallbackType ? <MessageIcon type={message.messageOpensCallbackType} /> : null
+            message.messageOpensCallbackType && (
+              <TouchableOpacity
+                accessibilityLabel={textForCallbackType(message.messageOpensCallbackType)}
+                testID={testIdForCallbackType(message.messageOpensCallbackType)}
+                onPress={() => {
+                  if (message.onDetails) message.onDetails()
+                }}
+                style={{borderWidth:1,borderColor:'#5869E6',backgroundColor:'#F0F5FF',padding:10,width:'95%',height:'auto',borderRadius:12,alignItems:'center'}}
+                  // ...theme.openButtonStyle,
+                
+                hitSlop={hitSlop}
+              >
+                <Text style={{ fontWeight: '500',color:'#5869E6', fontFamily: 'plus-jakarta-sans',}}>
+                  {textForCallbackType(message.messageOpensCallbackType)}
+                </Text>
+              </TouchableOpacity>
+            )
+            // message.messageOpensCallbackType ? <MessageIcon type={message.messageOpensCallbackType} /> : null
           }
         />
-        {message.messageOpensCallbackType && (
-          <TouchableOpacity
-            accessibilityLabel={textForCallbackType(message.messageOpensCallbackType)}
-            testID={testIdForCallbackType(message.messageOpensCallbackType)}
-            onPress={() => {
-              if (message.onDetails) message.onDetails()
-            }}
-            style={{
-              ...theme.openButtonStyle,
-            }}
-            hitSlop={hitSlop}
-          >
-            <Text style={{ ...theme.openButtonTextStyle }}>
-              {textForCallbackType(message.messageOpensCallbackType)}
-            </Text>
-          </TouchableOpacity>
-        )}
+        
       </View>
     </View>
   )

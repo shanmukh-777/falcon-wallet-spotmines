@@ -301,7 +301,8 @@ export const TextTheme: ITextTheme = {
     color: ColorPallet.brand.text,
   },
   normal: {
-    fontSize: 18,
+    // fontSize: 18,
+    fontSize:16,
     fontWeight: 'normal',
     color: ColorPallet.brand.text,
   },
@@ -704,7 +705,8 @@ export const ChatTheme = {
     marginTop: 8,
   },
   leftText: {
-    color: ColorPallet.brand.secondary,
+    // color: ColorPallet.brand.secondary,
+    color:'black',
     fontSize: TextTheme.normal.fontSize,
   },
   leftTextHighlighted: {
@@ -712,7 +714,8 @@ export const ChatTheme = {
     color: ColorPallet.brand.secondary,
   },
   rightText: {
-    color: ColorPallet.brand.secondary,
+    color:'white',
+    // color: ColorPallet.brand.secondary,
     fontSize: TextTheme.normal.fontSize,
   },
   rightTextHighlighted: {

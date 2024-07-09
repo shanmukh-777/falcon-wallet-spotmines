@@ -23,7 +23,7 @@ const DeliveryStack: React.FC = () => {
       screenOptions={{
         ...defaultStackOptions,
         cardStyleInterpolator: CardStyleInterpolators.forVerticalIOS,
-        headerShown: true,
+        headerShown: false,
         presentation: 'modal',
         headerLeft: () => null,
         headerRight: () => <HeaderRightHome />,

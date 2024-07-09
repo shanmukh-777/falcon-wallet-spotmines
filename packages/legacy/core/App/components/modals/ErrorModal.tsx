@@ -27,7 +27,8 @@ const ErrorModal: React.FC<ErrorModalProps> = ({ reportProblemAction }) => {
       flexDirection: 'column',
       justifyContent: 'center',
       alignItems: 'center',
-      backgroundColor: ColorPallet.brand.primaryBackground,
+      // backgroundColor: ColorPallet.brand.primaryBackground,
+      backgroundColor:'#F0F5FF'
     },
   })
 

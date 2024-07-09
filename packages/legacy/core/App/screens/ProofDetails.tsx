@@ -1,5 +1,4 @@
 import type { StackScreenProps } from '@react-navigation/stack'
-
 import { ProofExchangeRecord, ProofState } from '@aries-framework/core'
 import { useAgent, useConnectionById, useProofById } from '@aries-framework/react-hooks'
 import {
@@ -8,11 +7,11 @@ import {
   GroupedSharedProofDataItem,
   markProofAsViewed,
 } from '@hyperledger/aries-bifold-verifier'
-import { useFocusEffect } from '@react-navigation/native'
+import { useFocusEffect, useNavigation } from '@react-navigation/native'
 import { StackNavigationProp } from '@react-navigation/stack'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { BackHandler, ScrollView, StyleSheet, Text, View } from 'react-native'
+import { BackHandler, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
 import InformationReceived from '../assets/img/information-received.svg'
@@ -20,9 +19,11 @@ import Button, { ButtonType } from '../components/buttons/Button'
 import SharedProofData from '../components/misc/SharedProofData'
 import { useStore } from '../contexts/store'
 import { useTheme } from '../contexts/theme'
-import { ProofRequestsStackParams, Screens } from '../types/navigators'
+import { ProofRequestsStackParams, Screens, TabStackParams, TabStacks } from '../types/navigators'
 import { getConnectionName } from '../utils/helpers'
 import { testIdWithKey } from '../utils/testable'
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
+
 
 type ProofDetailsProps = StackScreenProps<ProofRequestsStackParams, Screens.ProofDetails>
 
@@ -100,6 +101,7 @@ const VerifiedProof: React.FC<VerifiedProofProps> = ({
       margin: 20,
     },
   })
+  console.log(record)
 
   const connection = useConnectionById(record.connectionId || '')
   const connectionLabel = useMemo(
@@ -137,12 +139,19 @@ const VerifiedProof: React.FC<VerifiedProofProps> = ({
   if (isHistory) {
     return (
       <ScrollView style={{ flexGrow: 1 }} testID={testIdWithKey('ProofDetailsHistoryView')}>
-        <View style={styles.container}>
-          {sharedProofDataItems.length > 0 && (
+        <View style={{marginTop:'10%',}}>
+        <View style={{display:'flex',flexDirection:'row',alignItems:'center',height:'15%',marginBottom:'5%'}} >
+            <TouchableOpacity  style={{width:48,height:48,backgroundColor:'white',display:'flex',justifyContent:'center',alignItems:'center',borderRadius:8,margin:'5%',shadowColor: '#212228', shadowOffset: { width: 0, height: 4, }, shadowOpacity: 0.1,shadowRadius: 12, elevation: 4,}}  onPress={()=>navigation.goBack()}>
+                <MaterialCommunityIcons name="arrow-left" size={24} color="black" />
+            </TouchableOpacity>
+            <Text style={{fontSize:16,fontWeight:'bold',color:'black',marginLeft:'4%'}} >Shared Information</Text>
+        </View>
+          {/* {sharedProofDataItems.length > 0 && (
             <View style={styles.descriptionContainer}>
               <Text style={styles.descriptionText}>
                 {senderReview ? (
                   <>
+                   
                     {t('ProofRequest.ReviewSentInformation', { count: sharedProofDataItems.length })}{' '}
                     <Text style={styles.label}>{connectionLabel}</Text>
                   </>
@@ -154,7 +163,7 @@ const VerifiedProof: React.FC<VerifiedProofProps> = ({
                 )}
               </Text>
             </View>
-          )}
+          )} */}
           <View style={styles.content}>
             <SharedProofData recordId={record.id} onSharedProofDataLoad={onSharedProofDataLoad} />
           </View>

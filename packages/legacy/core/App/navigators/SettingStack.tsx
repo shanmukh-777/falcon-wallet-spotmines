@@ -21,6 +21,7 @@ import { testIdWithKey } from '../utils/testable'
 
 import { createDefaultStackOptions } from './defaultStackOptions'
 import SupportScreen from '../screens/SupportScreen'
+import Networks from '../screens/Networks'
 
 const SettingStack: React.FC = () => {
   const Stack = createStackNavigator<SettingStackParams>()
@@ -91,6 +92,12 @@ const SettingStack: React.FC = () => {
         }}
       />
       <Stack.Screen
+        name={Screens.Networks}
+        component={Networks}
+        options={{ title: t('Screens.ChangePIN'), headerBackTestID: testIdWithKey('Back') 
+        }}
+      />
+       <Stack.Screen
         name={Screens.SupportScreen}
         component={SupportScreen}
         options={{ title: t('Screens.ChangePIN'), headerBackTestID: testIdWithKey('Back') 

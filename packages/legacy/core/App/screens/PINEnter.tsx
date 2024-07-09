@@ -8,7 +8,7 @@ import { useEffect, useRef, useState } from "react";
 import { NativeSyntheticEvent, TextInput, TextInputKeyPressEventData,StyleSheet,Dimensions,SafeAreaView,TouchableOpacity,View,Text, DeviceEventEmitter,KeyboardAvoidingView, Platform, ActivityIndicator  } from "react-native";
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
-// import Button, { ButtonType } from '../components/buttons/Button'
+import Button, { ButtonType } from '../components/buttons/Button'
 // import PINInput from '../components/inputs/PINInput'
 // import { InfoBoxType } from '../components/misc/InfoBox'
 // import PopupModal from '../components/modals/PopupModal'
@@ -35,6 +35,7 @@ import { BifoldError } from "../types/error";
 import { hashPIN } from "../utils/crypto";
 import PopupModal from "../components/modals/PopupModal";
 import { InfoBoxType } from "../components/misc/InfoBox";
+// import { Button } from "../components/buttons";
 // import { hashPIN } from '../utils/crypto'
 // import { testIdWithKey } from '../utils/testable'
 
@@ -652,7 +653,10 @@ const PINEnter: React.FC<PINEnterProps> = ({ setAuthenticated ,usage = PINEntryU
         fontSize: getFontSizel(),
         color: 'black',
         textAlign: 'center'
-      }
+      },
+      buttonContainer: {
+              width: '100%',
+            },
       
       })
 
@@ -971,6 +975,21 @@ const PINEnter: React.FC<PINEnterProps> = ({ setAuthenticated ,usage = PINEntryU
                         onCallToActionPressed={clearAlertModal}
                       />
                     )}
+                     {store.preferences.useBiometry && usage === PINEntryUsage.WalletUnlock && (
+            <>
+              <Text style={[TextTheme.normal, { alignSelf: 'center', marginTop: 10 }]}>{t('PINEnter.Or')}</Text>
+              <View style={[styles.buttonContainer, { marginTop: 10 }]}>
+                {/* <Button
+                  title={t('PINEnter.BiometricsUnlock')}
+                  buttonType={ButtonType.Secondary}
+                  // testID={testIdWithKey('Enter')}
+                  disabled={!continueEnabled}
+                  accessibilityLabel={t('PINEnter.BiometricsUnlock')}
+                  onPress={loadWalletCredentials}
+                /> */}
+              </View>
+            </>
+          )}
                   
         </View>
         </SafeAreaView>

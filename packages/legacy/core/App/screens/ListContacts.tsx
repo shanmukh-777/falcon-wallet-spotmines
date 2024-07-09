@@ -13,6 +13,7 @@ import { useStore } from '../contexts/store'
 import { useTheme } from '../contexts/theme'
 import { ContactStackParams, Screens, Stacks } from '../types/navigators'
 import { testIdWithKey } from '../utils/testable'
+import  Logoblue from '../assets/icons/Logoblue.svg'
 
 import { Text, Keyboard, ScrollView, TouchableOpacity, Image, Dimensions } from 'react-native'
 import { useState } from 'react'
@@ -113,13 +114,7 @@ interface ListContactsProps {
     const getFontSizeL = (): number => {
         return screenHeight < 600 ? screenHeight * 0.016 : screenHeight * 0.018
     }
-    useFocusEffect(() => {
-        console.log('ListContacts screen focused');
-        return () => {
-          console.log('ListContacts screen unfocused');
-        };
-      });
-
+ 
     const { ColorPallet } = useTheme()
     const { t } = useTranslation()
     const { records } = useConnections()
@@ -203,7 +198,8 @@ interface ListContactsProps {
         <View style={{ width: '100%', height: '100%', display: 'flex' }} >
             {connections.length == 0 ?
                 <View style={{ display: 'flex', width: '100%', height: '100%' }} >
-                    <View style={{ width: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-end', height: '11%', padding: '5%', backgroundColor: '#F0F5FF' }} >
+                    <View style={{ width: '100%', display: 'flex', flexDirection: 'row',  alignItems: 'flex-end', height: '11%', padding: '5%', backgroundColor: '#F0F5FF' }} >
+                    <Logoblue width={40} height={30}/>
                         <Text style={{ fontWeight: 'bold', fontSize: getFontSizeM(), color: 'black' }}>My Contacts</Text>
                         {/* <Activity /> */}
                     </View>
@@ -212,12 +208,13 @@ interface ListContactsProps {
                         <EmptyContact style={{ marginTop: screenHeight < 600 ? '3%' : '15%', marginBottom: screenHeight < 600 ? 0 : '5%' }} />
                         {/* <Image source={emptyamico} className={`${screenHeight < 600 ? 'mt-[3%] mb-0' : 'mt-[15%]  mb-[5%]'}`} /> */}
                         <Text style={{ fontSize: getFontSizeM(), color: 'black', fontWeight: 'bold' }}>Own your identity!</Text>
-                        <Text style={{ fontSize: getFontSizeL(), alignSelf: 'center', width: '80%', color: '#8E8E8E' }}>Scan QR code to contact trusted issuers to own your verifiable credentials.</Text>
+                        <Text style={{ fontSize: getFontSizeL(), textAlign: 'center', width: '80%', color: '#8E8E8E' }}>Scan QR code to form new contacts to exchange information securely.</Text>
                     </View>
                 </View>
                 :
                 <View style={{ width: '100%', height: '100%' }}>
                     <View style={{ width: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-end', height: '11%', padding: '5%', backgroundColor: '#F0F5FF' }} >
+                        
                         <Text style={{ fontSize: getFontSizeM(), color: 'black', fontWeight: 'bold' }}>My Contacts</Text>
                         <Activity />
                     </View>

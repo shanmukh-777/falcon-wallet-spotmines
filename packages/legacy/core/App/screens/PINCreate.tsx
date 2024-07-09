@@ -15,6 +15,8 @@ import {
     DeviceEventEmitter,
     NativeSyntheticEvent,
     TextInputKeyPressEventData,
+    Alert,
+    ActivityIndicator,
 } from 'react-native'
 
 
@@ -42,6 +44,7 @@ import { Dimensions } from 'react-native';
 import { useLayoutEffect } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import { flatMap } from 'lodash'
 
 
 interface PINCreateProps extends StackScreenProps<ParamListBase, Screens.CreatePIN> {
@@ -420,16 +423,18 @@ interface PinDotsProps {
   confirm1: boolean;
   confirm: (value: boolean) => void;
   setAuthenticated: (status: boolean) => void;
+  updatepin?:any
+  pinold?:any
 }
 
-const PinDots: React.FC<PinDotsProps> = ({ confirm1, confirm, setAuthenticated}) => {
+const PinDots: React.FC<PinDotsProps> = ({ confirm1, confirm, setAuthenticated,updatepin,pinold}) => {
   const [pin, setPin] = useState('');
   const textInputRef = useRef<TextInput>(null);
   const [createdPin, setCreatedPin] = useState<string | null>(null);
   const [pinConfirm, setPinConfirm] = useState<boolean>(confirm1);
   const [checkConfirmation, setCheckConfirmation] = useState<boolean>(false);
   const [showError, setShowError] = useState<boolean>(false);
-
+  const [newPinCheck,setNewPinCheck]=useState(false)
   const { setPIN: setWalletPIN, checkPIN, rekeyWallet } = useAuth()
   const [PIN, setPIN] = useState('')
   const navigation = useNavigation<StackNavigationProp<AuthenticateStackParams>>()
@@ -471,7 +476,7 @@ const PinDots: React.FC<PinDotsProps> = ({ confirm1, confirm, setAuthenticated})
           textInputRef.current.focus();
           return setPinConfirm(false)
       }
-      textInputRef.current.focus();
+    //   textInputRef.current.focus();
 
   }, [pinConfirm]);
 
@@ -490,9 +495,43 @@ const PinDots: React.FC<PinDotsProps> = ({ confirm1, confirm, setAuthenticated})
           setPin(pin.slice(0, -1));
       }
   };
+  const checking = async(pin:string) => {
+    setNewPinCheck(true)
+    if(updatepin )
+        {
+        if(pin.length === 6 && pin === createdPin)
+        {
+            const success = await rekeyWallet(pinold, pin, store.preferences.useBiometry)
+            if(success)
+                {
+                    Alert.alert(
+                        "Success",
+                        "PIN changed successfully",
+                        [
+                          {
+                            text: "OK",
+                            onPress: () => navigation.goBack()
+                          }
+                        ],
+                        { cancelable: false }
+                      );
+                
+                }
+                setNewPinCheck(false)
+        }
 
-  const checking = (pin:string) => {
-      if (pin.length === 6 && pin === createdPin) {
+        else{
+            setShowError(true)
+            setNewPinCheck(false)
+            setTimeout(() => {
+                setShowError(false)
+            }, 1000);
+        }
+
+
+    }
+    else  {
+    if (pin.length === 6 && pin === createdPin) {
         //   console.log("Cr", pin);
           // dispatch(setGlobalPin(pin));
         //   return navigation.navigate(Screens.UseBiometry)
@@ -504,6 +543,7 @@ const PinDots: React.FC<PinDotsProps> = ({ confirm1, confirm, setAuthenticated})
               setShowError(false)
           }, 1000);
       }
+    }
   }
 
   const confirmation = (pin:string) => {
@@ -551,6 +591,7 @@ const PinDots: React.FC<PinDotsProps> = ({ confirm1, confirm, setAuthenticated})
                       />
                   ))}
               </View>
+              {newPinCheck  && <ActivityIndicator/>}
           </View>
           {showError &&
               <View style={{ display: 'flex', alignItems: 'center', marginTop: 10 }}>
@@ -568,6 +609,9 @@ const PINCreate: React.FC<PINCreateProps> = ({ setAuthenticated , route }) => {
   const navigation = useNavigation<StackNavigationProp<AuthenticateStackParams>>()
   const screenHeight = Math.round(Dimensions.get('window').height);
   const [confirm, setConfirm] = useState(false);
+  const updatePin = (route.params as any)?.updatePin
+  const [pincheck,setPinCheck]=useState(false);
+  const [update,setUpdate]=useState(updatePin)
   const getFontSizem = () => {
       return screenHeight < 600 ? screenHeight * 0.015 : screenHeight * 0.025;
   };
@@ -586,12 +630,107 @@ const PINCreate: React.FC<PINCreateProps> = ({ setAuthenticated , route }) => {
   const { t } = useTranslation()
   const { PINSecurity } = useConfiguration()
 
-
+  const textInputRef1 = useRef<TextInput>(null);
   const getPinDotsProps = (confirm1: boolean, confirm: (value: boolean) => void) => ({ confirm1, confirm });
+  const [modalState, setModalState] = useState<ModalState>({
+          visible: false,
+          title: '',
+          message: '',
+        })
+        const [showError, setShowError] = useState<boolean>(false);
+
+  const checkOldPIN = async (PIN: string): Promise<boolean> => {
+        setPinCheck(true)
+        const valid = await checkPIN(PIN)
+        
+        if (!valid) {
+        //   setModalState({
+        //     visible: true,
+        //     title: t('PINCreate.InvalidPIN'),
+        //     message: t(`PINCreate.Message.OldPINIncorrect`),
+        //   })
+        console.log("not valid")
+        setShowError(true)
+        setPinCheck(false)
+        setTimeout(() => {
+            setShowError(false)
+        }, 3000);
+        }
+    else{
+        setUpdate(false)
+        setPinCheck(false)
+    }
+        
+        return valid
+      }
+      const handlePinChange = (newPin: string) => {
+        const sanitizedPin = newPin.replace(/[^0-9]/g, '');
+        const limitedPin = sanitizedPin.slice(0, 6);
+        setPin(limitedPin);
+    };
+      const [pin, setPin] = useState('');
+
+      const handleKeyPress = ({ nativeEvent }: NativeSyntheticEvent<TextInputKeyPressEventData>) => {
+        const inputKey = nativeEvent.key;
+        if (/^\d$/.test(inputKey)) {
+            const newPin = (pin + inputKey).slice(0, 6);
+            setPin(newPin);
+        } else if (inputKey === 'Backspace' && pin.length > 0) {
+            setPin(pin.slice(0, -1));
+        }
+    };
+    
 
   return (
       <SafeAreaView>
-          {!confirm ? <View style={{ width: '100%', height: '100%', display: 'flex', backgroundColor: 'white' }}>
+
+        {
+        update ?
+        (
+        <View style={{ width: '100%', height: '100%', display: 'flex',marginTop:'25%', backgroundColor: 'white' }}>
+        <Text style={{ fontSize: getFontSizem(), fontWeight: 'bold', alignSelf: 'center', color: 'black' }}>Enter PIN</Text>
+        <Text style={{ fontSize: getFontSizel(), alignSelf: 'center', color: '#8E8E8E', marginTop: '2%', marginBottom: '10%' }}>Enter old pin</Text>
+        {/* <PinDots {...getPinDotsProps(confirm, setConfirm)} /> */}
+           <View style={styles.container}>
+               <TextInput
+                    ref={textInputRef1}
+                     style={styles.input}
+                  keyboardType="numeric"
+                   maxLength={6}
+                         value={pin}
+                         onChangeText={handlePinChange}
+                         onKeyPress={handleKeyPress}
+                         onSubmitEditing={() => pin.length === 6 && (checkOldPIN(pin))}
+                         autoFocus
+                         blurOnSubmit={showError}
+                     />
+       
+                  <View style={styles.pinDots}>
+                     {[...Array(6)].map((_, index) => (
+                             <View
+                                 key={index}
+                                 style={[
+                                     styles.dot,
+                                     { backgroundColor : index < pin.length ? '#733DF5' : '#CBCBCC' },
+                                 ]}
+                             />
+                         ))}
+                     </View>
+                     {pincheck && <ActivityIndicator/>}
+                 </View>
+                 {showError &&
+              <View style={{ display: 'flex', alignItems: 'center', marginTop: 10 }}>
+                  <ErrAndSucSt type="error" message="pin doesn't match" />
+                  {/* <Text style={{ color: '#FF0000' }}>{t('Error.Message1040')}</Text> */}
+              </View>
+          }
+                 </View>
+                 
+                 )
+                 
+        :
+        (
+          !confirm ? <View style={{ width: '100%', height: '100%', display: 'flex', backgroundColor: 'white' }}>
               <TouchableOpacity
                   style={{
                       width: 48,
@@ -617,11 +756,12 @@ const PINCreate: React.FC<PINCreateProps> = ({ setAuthenticated , route }) => {
                   </TouchableOpacity>
                   <Text style={{ fontSize: getFontSizem(), fontWeight: 'bold', alignSelf: 'center', color: 'black' }}>Create PIN</Text>
                   <Text style={{ fontSize: getFontSizel(), alignSelf: 'center', color: '#8E8E8E', marginTop: '2%', marginBottom: '10%' }}>Confirm the pin for authentication</Text>
-                  <PinDots {...getPinDotsProps(confirm, setConfirm)} setAuthenticated={setAuthenticated} />
+                  <PinDots {...getPinDotsProps(confirm, setConfirm)} setAuthenticated={setAuthenticated} updatepin={updatePin} pinold={pin}/>
               </View>
-          }
+          
 
-
+        )
+    }
       </SafeAreaView>
   )
 }

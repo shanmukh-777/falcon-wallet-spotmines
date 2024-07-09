@@ -286,11 +286,13 @@ const Chat: React.FC<ChatProps> = ({ route }) => {
             borderWidth:5,
             borderColor:'red',
             backgroundColor: 'red',
+
           },
           left: {
             borderWidth:5,
             borderColor:'red',
-            backgroundColor: 'red',          },
+            backgroundColor: 'red',     
+               },
         }}
       />
     );
@@ -333,7 +335,7 @@ const Chat: React.FC<ChatProps> = ({ route }) => {
                         </View>
 
         </View>
-        <View style={{backgroundColor:'#F0F5FF',display:'flex',justifyContent:'center',alignSelf:'center',borderRadius:20,borderColor:'#5869E6',padding:'5%',width:'90%',marginTop:'5%'}} >
+        <View style={{backgroundColor:'#F0F5FF',display:'flex',justifyContent:'center',alignSelf:'center',borderRadius:20,borderColor:'#5869E6',padding:'5%',width:'90%',marginTop:'5%',marginBottom:'3%'}} >
                         <Text style={{alignSelf:'center',fontSize:15, color:'black'}}>Messages are end-to-end encrypted. No one outside this chat, not even _ _ _ _ _ can read the conversation.</Text>
         </View>
       <GiftedChat

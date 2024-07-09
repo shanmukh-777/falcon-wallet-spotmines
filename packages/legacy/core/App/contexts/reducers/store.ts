@@ -13,6 +13,7 @@ import {
   State,
 } from '../../types/state'
 import { generateRandomWalletName } from '../../utils/helpers'
+import { Use } from 'react-native-svg'
 
 enum OnboardingDispatchAction {
   ONBOARDING_UPDATED = 'onboarding/onboardingStateLoaded',
@@ -69,6 +70,12 @@ enum DeepLinkDispatchAction {
   ACTIVE_DEEP_LINK = 'deepLink/activeDeepLink',
 }
 
+enum UserProfileDispatchAction {
+  UPDATE_USERNAME = 'userProfile/updateUsername',
+  UPDATE_Mobile = 'userProfile/updateMobile',
+}
+
+
 export type DispatchAction =
   | OnboardingDispatchAction
   | LoginAttemptDispatchAction
@@ -78,6 +85,7 @@ export type DispatchAction =
   | AuthenticationDispatchAction
   | DeepLinkDispatchAction
   | MigrationDispatchAction
+  | UserProfileDispatchAction
 
 export const DispatchAction = {
   ...OnboardingDispatchAction,
@@ -88,6 +96,7 @@ export const DispatchAction = {
   ...AuthenticationDispatchAction,
   ...DeepLinkDispatchAction,
   ...MigrationDispatchAction,
+  ...UserProfileDispatchAction,
 }
 
 export interface ReducerAction<R> {
@@ -538,6 +547,29 @@ export const reducer = <S extends State>(state: S, action: ReducerAction<Dispatc
       return {
         ...state,
         ...{ deepLink: { activeDeepLink: value } },
+      }
+    }
+
+    case UserProfileDispatchAction.UPDATE_USERNAME: {
+      const username = (action?.payload ?? []).pop() ?? ''
+      const userProfile = { ...state.userProfile, username }
+
+      AsyncStorage.setItem(LocalStorageKeys.UserProfile, JSON.stringify(userProfile))
+
+      return {
+        ...state,
+        userProfile,
+      }
+    }
+    case UserProfileDispatchAction.UPDATE_Mobile: {
+      const email = (action?.payload ?? []).pop() ?? ''
+      const userProfile = { ...state.userProfile, email }
+
+      AsyncStorage.setItem(LocalStorageKeys.UserProfile, JSON.stringify(userProfile))
+
+      return {
+        ...state,
+        userProfile,
       }
     }
     default:

@@ -1,11 +1,15 @@
-import { View, Text, Image, TouchableOpacity, Dimensions, SafeAreaView } from 'react-native'
-import React from 'react'
+import { View, Text, Image, TouchableOpacity, Dimensions, SafeAreaView, Alert, Platform, PermissionsAndroid, Linking } from 'react-native'
+import React, { useEffect } from 'react'
 import { useNavigation } from '@react-navigation/native'
 import Amico from './../assets/icons/amico.svg'
 import { BUTTON_STYLE1 } from '../constants/fonts'
 import { BUTTON_STYLE2 } from '../constants/fonts'
 import { StackNavigationProp } from '@react-navigation/stack'
 import { AuthenticateStackParams, Screens } from '../types/navigators'
+// import LocalAuth from 'react-native-local-auth';
+// import Geolocation from 'react-native-geolocation-service';
+
+
 
 const GeoLocationScreen = () => {
   // const navigation = useNavigation();
@@ -13,7 +17,67 @@ const GeoLocationScreen = () => {
   const screenHeight = Math.round(Dimensions.get('window').height)
 
 
-  
+  // useEffect(() => {
+  //   requestBiometricAccess();
+  //   requestLocationAccess();
+  // }, []);
+
+  // const requestBiometricAccess = async () => {
+  //   try {
+  //     const isSupported = await LocalAuth.isSupported();
+  //     if (isSupported) {
+  //       const authenticated = await LocalAuth.authenticate({
+  //         reason: 'We need to verify your identity',
+  //       });
+  //       if (!authenticated) {
+  //         Alert.alert('Authentication failed', 'Biometric authentication failed');
+  //       }
+  //     }
+  //   } catch (error) {
+  //     console.error('Biometric authentication error:', error);
+  //   }
+  // };
+
+  // const requestLocationAccess = async () => {
+  //   if (Platform.OS === 'android') {
+  //     const granted = await PermissionsAndroid.request(
+  //       PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+  //       {
+  //         title: 'Location Permission',
+  //         message: 'We need access to your location for providing location-based services.',
+  //         buttonNeutral: 'Ask Me Later',
+  //         buttonNegative: 'Cancel',
+  //         buttonPositive: 'OK',
+  //       }
+  //     );
+  //     if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+  //       console.log('Location permission granted');
+  //     } else {
+  //       Alert.alert(
+  //         'Permission denied',
+  //         'Location permission was denied. Please enable it from the settings.',
+  //         [
+  //           { text: 'Cancel', style: 'cancel' },
+  //           { text: 'Open Settings', onPress: () => Linking.openSettings() },
+  //         ]
+  //       );
+  //     }
+  //   } else {
+  //     const authorization = await Geolocation.requestAuthorization('whenInUse');
+  //     if (authorization === 'granted') {
+  //       console.log('Location permission granted');
+  //     } else {
+  //       Alert.alert(
+  //         'Permission denied',
+  //         'Location permission was denied. Please enable it from the settings.',
+  //         [
+  //           { text: 'Cancel', style: 'cancel' },
+  //           { text: 'Open Settings', onPress: () => Linking.openSettings() },
+  //         ]
+  //       );
+  //     }
+  //   }
+  // };
 
   const getFontSizem = () => {
     return screenHeight < 600 ? screenHeight * 0.015 : screenHeight * 0.025
@@ -53,7 +117,7 @@ const GeoLocationScreen = () => {
           <Text
             style={{
               fontSize: getFontSizel(),
-              marginBottom: 4,
+              marginBottom: '5%',
               width: '93%',
               marginHorizontal: 'auto',
               color: 'black',
@@ -65,9 +129,9 @@ const GeoLocationScreen = () => {
             style={{
               display: 'flex',
               flexDirection: 'row',
-              justifyContent: 'center',
+              justifyContent: 'space-between',
               alignItems: 'center',
-              width: '100%',
+              width: '90%',
               gap:5,
               marginHorizontal: 'auto',
             }}
@@ -82,9 +146,9 @@ const GeoLocationScreen = () => {
                 borderRadius: 12,
                 borderWidth: 1,
                 borderColor: '#5869E6',
-                width: '45%',
+                width: '48%',
                 paddingHorizontal: '3%',
-                paddingVertical: '2%',
+                paddingVertical: '3%',
               }}
               onPress={() => {
                 navigation.navigate(Screens.LocationScreen, { selectedCountry: null })
@@ -100,8 +164,8 @@ const GeoLocationScreen = () => {
                 justifyContent: 'center',
                 alignItems: 'center',
                 borderRadius: 12,
-                width: '45%',
-                padding: '2%',
+                width: '48%',
+                padding: '3%',
               }}
               onPress={() => {
                 navigation.navigate(Screens.LocationScreen, { selectedCountry: 'India' })

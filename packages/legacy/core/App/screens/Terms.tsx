@@ -14,7 +14,7 @@ import { useStore } from '../contexts/store'
 import { useTheme } from '../contexts/theme'
 import { AuthenticateStackParams, Screens } from '../types/navigators'
 import { testIdWithKey } from '../utils/testable'
-
+import ToggleBuutton from '../components/falcon/ToggleBuutton'
 
 import {
   Image,
@@ -31,7 +31,7 @@ import Google from './../assets/icons/google.svg';
 import { FONT_STYLE_1, FONT_STYLE_2, BUTTON_STYLE1, BUTTON_STYLE2 } from './../constants/fonts'
 import { useAnimatedComponents } from '../contexts/animated-components'
 import { useAuth } from '../contexts/auth'
-
+import Icon from "react-native-vector-icons/AntDesign"
 
 // const Terms: React.FC = () => {
 //   const [, dispatch] = useStore()
@@ -202,6 +202,16 @@ const Terms: React.FC = () => {
       width: screenHeight < 600 ? '70%' : 0,
     },
   });
+  const handletogglepress=()=>{
+    console.log("togggle clicked")
+
+  }
+
+  const user = {
+    name: 'Augustine', 
+    email: 'username@gmail.com', 
+    profilePicture: 'https://pics.craiyon.com/2023-07-15/dc2ec5a571974417a5551420a4fb0587.webp' 
+  }
 
   return (
     <SafeAreaView>
@@ -215,7 +225,7 @@ const Terms: React.FC = () => {
         </View>
         <View style={{ width: '100%', height: screenHeight < 600 ? '25%' : '30%', paddingHorizontal: '6%' }}>
           <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'flex-start', height: '50%' }}>
-            {/* <ToggleBuutton /> */}
+            <ToggleBuutton onPress={handletogglepress}/>
             <Text style={{ ...FONT_STYLE_1 as TextStyle, fontSize: getFontSizel(), color: 'black', marginLeft: '3%' }}>Enable Auto Back Up</Text>
           </View>
           <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', gap: 4 }}>
@@ -231,12 +241,12 @@ const Terms: React.FC = () => {
         </View>
       </View>
 
-      <Modal animationType="slide" transparent={true} visible={modalVisible}>
+      {/* <Modal animationType="slide" transparent={true} visible={modalVisible}>
         <View style={styles.modalContainer}>
           <View style={styles.modalContent}>
-            <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center', borderBottomWidth: 2, backgroundColor: 'white', borderColor: 'white', width: '100%', padding: '2%' }}>
+            <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center', borderBottomWidth: 2, backgroundColor: 'white', borderColor: 'white', width: '100%', padding: '2%' }}> */}
               {/* <Image source={google} resizeMode='contain' style={{ marginRight: '7%' }} /> */}
-              <Google />
+              {/* <Google />
               <Text style={{ fontSize: getFontSizel(), color: '#5F5F5F', width: '80%' }}>Backup your wallet to Google Drive</Text>
             </View>
             <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', padding: '2%' }}>
@@ -247,10 +257,57 @@ const Terms: React.FC = () => {
             </View>
           </View>
         </View>
-      </Modal>
+      </Modal> */}
+
+<Modal animationType="slide" transparent={true} visible={modalVisible}>
+      <View style={styles.modalContainer}>
+        <View style={styles.modalContent}>
+          <View style={styles.header}>
+            <View style={styles.innerheader}>
+            <Google />
+            <Text style={styles.headerText}>Backup to Google Cloud</Text>
+            </View>
+            <TouchableOpacity onPress={handleCancelBackup}>
+            <Icon name='close' size={20} color="black" />
+            </TouchableOpacity>
+          </View>
+          <View style={styles.userInfo}>
+            <Image source={{ uri: user.profilePicture }} style={styles.profilePicture} />
+            <View style={styles.userDetails}>
+              <Text style={styles.userName}>{user.name}</Text>
+              <Text style={styles.userEmail}>{user.email}</Text>
+            </View>
+          </View>
+          <TouchableOpacity style={styles.continueButton}>
+            <Text style={styles.continueButtonText}>Continue as {user.name}</Text>
+          </TouchableOpacity>
+          <Text style={styles.termsText}>
+            To create your account, Google will share your name, email address, and profile picture with "MyApp". See "MyApp"'s 
+            <Text style={styles.linkText}> privacy policy</Text> and <Text style={styles.linkText}>terms of service</Text>.
+          </Text>
+        </View>
+      </View>
+    </Modal>
     </SafeAreaView>
   );
 };
+
+// const styles = StyleSheet.create({
+//   modalContainer: {
+//     flex: 1,
+//     justifyContent: 'flex-end',
+//     alignItems: 'center',
+//     backgroundColor: 'rgba(0, 0, 0, 0.5)',
+//   },
+//   modalContent: {
+//     width: '100%',
+//     backgroundColor: 'white',
+//     borderTopLeftRadius: 20,
+//     borderTopRightRadius: 20,
+//     padding: '5%',
+//     alignItems: 'center',
+//   },
+// });
 
 const styles = StyleSheet.create({
   modalContainer: {
@@ -264,8 +321,81 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
-    padding: '5%',
+    paddingTop: '5%',
     alignItems: 'center',
+  },
+  header: {
+    flexDirection: 'row',
+    justifyContent:"space-between",
+    alignItems:"center",
+    width:"100%",
+    marginBottom: 20,
+    paddingBottom:"5%",
+    borderBottomWidth: 1,
+    borderBottomColor: '#DDDDDD',
+    paddingHorizontal:"5%",
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 3 },
+    shadowOpacity: 0.2,
+    shadowRadius: 3,
+    elevation: 3,
+    backgroundColor: 'white',
+  },
+  innerheader:{
+    flexDirection: "row",
+    alignItems:"center"
+  },
+  headerText: {
+    fontSize: 18,
+    color: '#5F5F5F',
+    marginLeft: 10,
+  },
+  userInfo: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    width:"80%",
+    marginBottom: 25,
+    marginTop:15,
+  },
+  profilePicture: {
+    width: 50,
+    height: 50,
+    borderRadius: 50,
+    marginRight: 10,
+  },
+  userDetails: {
+    flexDirection: 'column',
+  },
+  userName: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color:"black"
+  },
+  userEmail: {
+    fontSize: 14,
+    color: '#5F5F5F',
+  },
+  continueButton: {
+    backgroundColor: '#1A73E8',
+    padding: 10,
+    borderRadius: 5,
+    textAlign:"center",
+    marginBottom: 20,
+    width:"80%"
+  },
+  continueButtonText: {
+    color: 'white',
+    textAlign: 'center',
+    fontSize: 16,
+  },
+  termsText: {
+    fontSize: 14,
+    color: '#5F5F5F',
+    paddingBottom:"5%",
+    width:"80%"
+  },
+  linkText: {
+    color: '#4285F4',
   },
 });
 

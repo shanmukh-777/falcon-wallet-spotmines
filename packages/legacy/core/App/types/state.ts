@@ -35,6 +35,7 @@ export interface Tours {
   seenProofRequestTour: boolean
 }
 
+
 export interface Lockout {
   displayNotification: boolean
 }
@@ -52,6 +53,11 @@ export interface Authentication {
 export interface DeepLink {
   activeDeepLink?: string
 }
+export interface UserProfile {
+  username: string
+  mobile: string
+}
+
 
 export interface State {
   onboarding: Onboarding
@@ -63,4 +69,5 @@ export interface State {
   deepLink: DeepLink
   migration: Migration
   loading: boolean
+  userProfile:UserProfile
 }

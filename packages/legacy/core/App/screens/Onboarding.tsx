@@ -243,7 +243,7 @@ const Onboarding: React.FC<OnboardingProps> = ({
           </Text>
         </View>
         <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignSelf:'center', width: '90%', marginHorizontal: 'auto', marginTop: screenHeight < 600 ? '5%' : '14%' }}>
-          <TouchableOpacity style={{ ...BUTTON_STYLE1, borderRadius: 10, backgroundColor: '#F0F5FF', display: 'flex', justifyContent: 'center', alignItems: 'center', borderWidth: 2, borderColor: '#5869E6', paddingHorizontal: '6%', paddingVertical: '3%' }} >
+          <TouchableOpacity style={{ ...BUTTON_STYLE1, borderRadius: 10, backgroundColor: '#F0F5FF', display: 'flex', justifyContent: 'center', alignItems: 'center', borderWidth: 2, borderColor: '#5869E6', paddingHorizontal: '6%', paddingVertical: '3%' }}  onPress={()=>{navigation.navigate(Screens.ImportFile)}} >
             <Text style={[ FONT_STYLE_1 as TextStyle, {fontSize: getFontSize(), color: '#5869E6' }]}>Recover Wallet</Text>
           </TouchableOpacity>
 

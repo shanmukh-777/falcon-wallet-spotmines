@@ -5,6 +5,7 @@ export const renderBubble = (props: any, theme: any) => {
   return (
     <Bubble
       {...props}
+      
       wrapperStyle={{
         left: {
           ...theme.leftBubble,

@@ -42,6 +42,11 @@ import PersonalInfoScreen from '../screens/PersonalInfoScreen'
 import OtpScreen from '../screens/OtpScreen'
 import RecoveryPhraseScreen from '../screens/RecoveryPhaseScreen'
 import WalletAnimationScreen from '../screens/WalletAnimationScreen'
+import LivenessCheck from '../screens/LivenessCheck'
+import AadharScan from '../screens/AadharScan'
+import RecoverWalletScreen from '../screens/RecoverWalletScreen'
+import ImportFile from '../screens/ImportFile'
+
 
 
 const RootStack: React.FC = () => {
@@ -264,7 +269,7 @@ const RootStack: React.FC = () => {
           name={Screens.Chat}
           component={Chat}
           options={({ navigation }) => ({
-            headerShown: true,
+            headerShown: false,
             title: t('Screens.CredentialOffer'),
             headerLeft: () => (
               <HeaderButton
@@ -356,7 +361,40 @@ const RootStack: React.FC = () => {
           })}
           component={LocationScreen}
         />
-         <Stack.Screen
+          <Stack.Screen 
+        name={Screens.ImportFile}
+        component={ImportFile}
+        options={() => ({
+          // title: ('Screens.Geo Location'),
+          headerTintColor: OnboardingTheme.headerTintColor,
+          headerShown: false,
+          headerLeft: () => false,
+          rightLeft: () => false,
+        })}
+        />
+        <Stack.Screen 
+        name={Screens.RecoverWalletScreen}
+        component={RecoverWalletScreen}
+        options={() => ({
+          // title: ('Screens.Geo Location'),
+          headerTintColor: OnboardingTheme.headerTintColor,
+          headerShown: false,
+          headerLeft: () => false,
+          rightLeft: () => false,
+        })}
+        />
+        <Stack.Screen
+          name={Screens.AadharScan}
+          options={() => ({
+            // title: ('Screens.Geo Location'),
+            headerTintColor: OnboardingTheme.headerTintColor,
+            headerShown: false,
+            headerLeft: () => false,
+            rightLeft: () => false,
+          })}
+          component={AadharScan}
+        />
+         {/* <Stack.Screen
           name={Screens.PersonalInfoScreen}
           options={() => ({
             // title: ('Screens.Geo Location'),
@@ -366,8 +404,19 @@ const RootStack: React.FC = () => {
             rightLeft: () => false,
           })}
           component={PersonalInfoScreen}
-        />
+        /> */}
         <Stack.Screen
+          name={Screens.LivenessCheck}
+          options={() => ({
+            // title: ('Screens.Geo Location'),
+            headerTintColor: OnboardingTheme.headerTintColor,
+            headerShown: false,
+            headerLeft: () => false,
+            rightLeft: () => false,
+          })}
+          component={LivenessCheck}
+        />
+        {/* <Stack.Screen
           name={Screens.OtpScreen}
           options={() => ({
             // title: ('Screens.Geo Location'),
@@ -377,8 +426,8 @@ const RootStack: React.FC = () => {
             rightLeft: () => false,
           })}
           component={OtpScreen}
-        />
-        <Stack.Screen
+        /> */}
+      <Stack.Screen
           name={Screens.Terms}
           options={() => ({
             title: t('Screens.Terms'),
@@ -389,7 +438,7 @@ const RootStack: React.FC = () => {
           })}
           component={terms}
         />
-         <Stack.Screen
+           <Stack.Screen
           name={Screens.RecoveryPhraseScreen}
           options={() => ({
             // title: t('Screens.RecoveryPhraseScreen'),

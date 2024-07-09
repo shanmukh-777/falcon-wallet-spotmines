@@ -16,12 +16,13 @@ export const ChatEvent: React.FC<ChatEventProps> = ({ userLabel, actionLabel, ro
   return (
     <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
       {userLabel && (
-        <Text style={[role === Role.me ? ChatTheme.rightText : ChatTheme.leftText, { marginRight: 4 }]}>
+        <Text style={[role === Role.me ? ChatTheme.rightText: ChatTheme.leftText, { marginRight: 4 }]}>
           {userLabel}
         </Text>
       )}
       {actionLabel && (
-        <Text style={[role === Role.me ? ChatTheme.rightTextHighlighted : ChatTheme.leftTextHighlighted]}>
+        // <Text style={[role === Role.me ? ChatTheme.rightTextHighlighted : ChatTheme.leftTextHighlighted]}>
+        <Text style={[role === Role.me ? ChatTheme.rightText : ChatTheme.leftText]}>
           {actionLabel}
         </Text>
       )}

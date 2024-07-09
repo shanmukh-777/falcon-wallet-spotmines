@@ -46,6 +46,7 @@
     "@aries-framework/push-notifications": "0.5.0",
     "@aries-framework/react-hooks": "^0.4.2",
     "@aries-framework/react-native": "^0.4.0",
+    "@aws-amplify/ui-react-liveness": "^3.0.22",
     "@babel/core": "^7.20.0",
     "@babel/runtime": "^7.20.0",
     "@commitlint/cli": "^11.0.0",
@@ -82,6 +83,7 @@
     "@types/react-native": "~0.72.3",
     "@types/react-native-vector-icons": "^6.4.6",
     "@types/react-test-renderer": "^18.0.1",
+    "@types/xml2js": "^0.4.14",
     "@typescript-eslint/eslint-plugin": "^6.6.0",
     "@typescript-eslint/parser": "^6.6.0",
     "axios": "^1.4.0",
@@ -113,6 +115,7 @@
     "react-native-argon2": "^2.0.1",
     "react-native-bouncy-checkbox": "^3.0.5",
     "react-native-builder-bob": "^0.21.3",
+    "react-native-camera": "^4.2.1",
     "react-native-collapsible": "^1.6.1",
     "react-native-config": "^1.4.2",
     "react-native-confirmation-code-field": "^7.3.0",
@@ -141,7 +144,8 @@
     "react-native-vision-camera": "^3.6.16",
     "react-test-renderer": "^18.2.0",
     "typescript": "^5.0.4",
-    "uuid": "^9.0.0"
+    "uuid": "^9.0.0",
+    "xml2js": "^0.6.2"
   },
   "peerDependencies": {
     "@aries-framework/anoncreds": "^0.4.0",
@@ -225,6 +229,12 @@
     ]
   },
   "dependencies": {
-    "react-native-camera": "^4.2.1"
+    "@aws-amplify/datastore": "^5.0.35",
+    "aws-amplify": "^6.3.4",
+    "react-native-document-picker": "^9.3.0",
+    "react-native-file-access": "^3.1.0",
+    "react-native-qrcode-scanner": "^1.5.5",
+    "react-native-webview": "^13.10.4",
+    "vision-camera-code-scanner": "^0.2.0"
   }
 }

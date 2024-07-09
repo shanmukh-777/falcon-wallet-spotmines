@@ -9,8 +9,9 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 import Button, { ButtonType } from '../components/buttons/Button'
 import { useAnimatedComponents } from '../contexts/animated-components'
 import { useTheme } from '../contexts/theme'
-import { Screens, TabStacks } from '../types/navigators'
+import { Screens, TabStackParams, TabStacks } from '../types/navigators'
 import { testIdWithKey } from '../utils/testable'
+import { StackNavigationProp } from '@react-navigation/stack'
 
 export interface ProofRequestAcceptProps {
   visible: boolean
@@ -21,7 +22,9 @@ const ProofRequestAccept: React.FC<ProofRequestAcceptProps> = ({ visible, proofI
   const { t } = useTranslation()
   const [proofDeliveryStatus, setProofDeliveryStatus] = useState<ProofState>(ProofState.RequestReceived)
   const proof = useProofById(proofId)
-  const navigation = useNavigation()
+  // const navigation = useNavigation()
+  const navigation = useNavigation<StackNavigationProp<TabStackParams>>()
+
   const { ColorPallet, TextTheme } = useTheme()
   const { SendingProof, SentProof } = useAnimatedComponents()
 
@@ -57,7 +60,7 @@ const ProofRequestAccept: React.FC<ProofRequestAcceptProps> = ({ visible, proofI
   }
 
   const onBackToHomeTouched = () => {
-    navigation.getParent()?.navigate(TabStacks.HomeStack, { screen: Screens.Home })
+    navigation.navigate(TabStacks.CredentialStack,{screen:Screens.ListCredentials})
   }
 
   useEffect(() => {

@@ -26,7 +26,7 @@ const Pointers: React.FC = () => {
   return (
     <View style={{ width: '90%', height: 'auto', marginTop: '2%' }}>
       <View style={{ flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center', gap: 2, marginBottom: '5%' }}>
-        <View style={{ borderRadius: 100 ,backgroundColor: 'divColor', padding: screenHeight < 600? 2 : 4 }}>
+        <View style={{ borderRadius: 100 ,backgroundColor: '#F0F5FF', padding: screenHeight < 600? 2 : 4 }}>
           
           {/* <Image source={Logo} resizeMode="contain" style={styles.imagestyle} /> */}
           <Icon  name="browser" size={24} color="#733DF5" />

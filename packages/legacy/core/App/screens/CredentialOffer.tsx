@@ -4,13 +4,14 @@ import { CredentialPreviewAttribute } from '@aries-framework/core'
 import { useCredentialById } from '@aries-framework/react-hooks'
 import { BrandingOverlay } from '@hyperledger/aries-oca'
 import { Attribute, CredentialOverlay } from '@hyperledger/aries-oca/build/legacy'
-import { useIsFocused } from '@react-navigation/core'
-import { StackScreenProps } from '@react-navigation/stack'
+import { useIsFocused, useNavigation } from '@react-navigation/core'
+import { StackNavigationProp, StackScreenProps } from '@react-navigation/stack'
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { DeviceEventEmitter, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { DeviceEventEmitter, Dimensions, StyleSheet, Text, TextStyle, TouchableOpacity, View } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import { BUTTON_STYLE1 ,BUTTON_STYLE2} from '../constants/fonts'
+import { FONT_STYLE_1, FONT_STYLE_2, FONT_STYLE_3, BUTTON_STYLE1, BUTTON_STYLE2 } from './../constants/fonts';
+
 import Button, { ButtonType } from '../components/buttons/Button'
 import ConnectionAlert from '../components/misc/ConnectionAlert'
 import ConnectionImage from '../components/misc/ConnectionImage'
@@ -27,7 +28,7 @@ import { useTheme } from '../contexts/theme'
 import { useTour } from '../contexts/tour/tour-context'
 import { useOutOfBandByConnectionId } from '../hooks/connections'
 import { BifoldError } from '../types/error'
-import { TabStacks, NotificationStackParams, Screens } from '../types/navigators'
+import { TabStacks, NotificationStackParams, Screens, TabStackParams } from '../types/navigators'
 import { ModalUsage } from '../types/remove'
 import { TourID } from '../types/tour'
 import { useAppAgent } from '../utils/agent'
@@ -35,10 +36,11 @@ import { getCredentialIdentifiers, isValidAnonCredsCredential } from '../utils/c
 import { getCredentialConnectionLabel } from '../utils/helpers'
 import { buildFieldsFromAnonCredsCredential } from '../utils/oca'
 import { testIdWithKey } from '../utils/testable'
+import Document from '../components/falcon/Document'
+import AadharSchema from '../components/falcon/AadharSchema'
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 
 import CredentialOfferAccept from './CredentialOfferAccept'
-import Document from '../components/falcon/Document'
-import CredentialDetails from '../screens/CredentialDetails'
 
 type CredentialOfferProps = StackScreenProps<NotificationStackParams, Screens.CredentialOffer>
 
@@ -78,6 +80,8 @@ const CredentialOffer: React.FC<CredentialOfferProps> = ({ navigation, route }) 
     },
     footerButton: {
       paddingTop: 10,
+      display:'flex',
+      flexDirection:'row'
     },
   })
 
@@ -111,7 +115,6 @@ const CredentialOffer: React.FC<CredentialOfferProps> = ({ navigation, route }) 
   }, [])
 
   useEffect(() => {
-    // console.log(overlay.presentationFields)
     if (!(credential && isValidAnonCredsCredential(credential))) {
       return
     }
@@ -172,6 +175,7 @@ const CredentialOffer: React.FC<CredentialOfferProps> = ({ navigation, route }) 
       DeviceEventEmitter.emit(EventTypes.ERROR_ADDED, error)
     }
   }
+  const navigation2 = useNavigation<StackNavigationProp<TabStackParams>>()
 
   const handleDeclineTouched = async () => {
     try {
@@ -184,7 +188,8 @@ const CredentialOffer: React.FC<CredentialOfferProps> = ({ navigation, route }) 
       }
 
       toggleDeclineModalVisible()
-      navigation.getParent()?.navigate(TabStacks.HomeStack, { screen: Screens.Home })
+      // navigation.getParent()?.navigate(TabStacks.HomeStack, { screen: Screens.Home })
+      navigation2.navigate(TabStacks.CredentialStack,{screen:Screens.ListCredentials})
     } catch (err: unknown) {
       const error = new BifoldError(t('Error.Title1025'), t('Error.Message1025'), (err as Error)?.message ?? err, 1025)
       DeviceEventEmitter.emit(EventTypes.ERROR_ADDED, error)
@@ -209,6 +214,11 @@ const CredentialOffer: React.FC<CredentialOfferProps> = ({ navigation, route }) 
       </>
     )
   }
+  const screenHeight = Math.round(Dimensions.get('window').height)
+
+  const getFontSize = () => {
+    return screenHeight < 600 ? screenHeight * 0.015 : screenHeight * 0.017
+  }
 
   const footer = () => {
     return (
@@ -221,9 +231,9 @@ const CredentialOffer: React.FC<CredentialOfferProps> = ({ navigation, route }) 
         }}
       >
         {loading ? <RecordLoading /> : null}
-        {credentialConnectionLabel && goalCode === 'aries.vc.issue' ? (
+        {/* {credentialConnectionLabel && goalCode === 'aries.vc.issue' ? (
           <ConnectionAlert connectionID={credentialConnectionLabel} />
-        ) : null}
+        ) : null} */}
         <View style={styles.footerButton}>
           <Button
             title={t('Global.Accept')}
@@ -250,135 +260,53 @@ const CredentialOffer: React.FC<CredentialOfferProps> = ({ navigation, route }) 
 
   return (
     <SafeAreaView style={{ flexGrow: 1 }} edges={['bottom', 'left', 'right']}>
-      <Record fields={overlay.presentationFields || []} footer={footer} />
-      {/* <CredentialDetails /> */}
-      {/* <Document credential={credential} issueDate={credential?.updatedAt?.toISOString()}  /> */}
+      <View style={{height:'100%', width:'100%'}}>
+      <View style={{display:'flex',flexDirection:'row',alignItems:'center',height:'15%'}} >
+            <TouchableOpacity  style={{width:48,height:48,backgroundColor:'white',display:'flex',justifyContent:'center',alignItems:'center',borderRadius:8,margin:'5%',shadowColor: '#212228', shadowOffset: { width: 0, height: 4, }, shadowOpacity: 0.1,shadowRadius: 12, elevation: 4,}}  onPress={ ()=>{navigation2.navigate(TabStacks.CredentialStack,{screen:Screens.ListCredentials})}}>
+                <MaterialCommunityIcons name="arrow-left" size={24} color="black" />
+            </TouchableOpacity>
+            <Text style={{fontSize:16,fontWeight:'bold',color:'black',marginLeft:'4%'}} >Details</Text>
+        </View>
+        <View style={{height:'70%',display:'flex',alignItems:'center'}}>
+
+        <Document credential={credential} issueDate={Date.now().toString()}  />
+        <AadharSchema fields={overlay.presentationFields || []}   /> 
+      {/* <Record fields={overlay.presentationFields || []}  footer={footer} /> */}
+     
+
       <CredentialOfferAccept visible={acceptModalVisible} credentialId={credentialId} />
-      <CommonRemoveModal
+      {/* <CommonRemoveModal
         usage={ModalUsage.CredentialOfferDecline}
         visible={declineModalVisible}
         onSubmit={handleDeclineTouched}
         onCancel={toggleDeclineModalVisible}
-      />
+        /> */}
+        </View>
+      <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', alignSelf:'center', width: '90%', marginHorizontal: 'auto', marginTop: screenHeight < 600 ? '5%' : '14%' }}>
+          <TouchableOpacity style={{ ...BUTTON_STYLE1, borderRadius: 10, backgroundColor: '#F0F5FF', width:'45%', display: 'flex', justifyContent: 'center', alignItems: 'center', borderWidth: 2, borderColor: '#5869E6', paddingHorizontal: '6%', paddingVertical: '3%' }}  onPress={handleDeclineTouched}>
+            <Text style={[ FONT_STYLE_1 as TextStyle, {fontSize: getFontSize(), color: '#5869E6' }]}>Decline</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={{
+              ...BUTTON_STYLE2,
+              backgroundColor: '#5869E6',
+              display: 'flex',
+              width:'45%',
+              justifyContent: 'center',
+              alignItems: 'center',
+              borderRadius: 10,
+              paddingHorizontal: '6%',
+              paddingVertical: '3%'
+            }}
+            onPress={handleAcceptTouched}// Change onPress handler to onSkipTouched
+          >
+
+            <Text style={[FONT_STYLE_1 as TextStyle, {fontSize: getFontSize(), color: 'white' }]}>Add to Wallet</Text>
+          </TouchableOpacity>
+        </View>
+        </View>
     </SafeAreaView>
-  //   <SafeAreaView>
-  //   <View
-  //     style={{
-  //       width: '100%',
-  //       height: '85%',
-  //       display: 'flex',
-  //       alignItems: 'center',
-  //       marginTop: '10%',
-        
-  //     }}>
-  //     <Text
-  //       style={{fontSize: 20, alignSelf: 'center', marginBottom: '6%',color:'black'}}>
-  //       Do you want to form a connection with Benagluru University?
-  //     </Text>
-  //     <View
-  //       style={{
-  //         width: '93%',
-  //         marginHorizontal: 'auto',
-  //         backgroundColor: 'white',
-  //         height:'15%',
-  //         display: 'flex',
-  //         flexDirection: 'row',
-  //         justifyContent: 'flex-start',
-  //         alignItems: 'center',
-  //         borderRadius: 20,
-  //         shadowColor: '#212228', shadowOffset: { width: 0, height: 4, }, shadowOpacity: 0.1,shadowRadius: 12, elevation: 4,
-  //       }}>
-  //       <View
-  //         style={{
-  //           height: '90%',
-  //           backgroundColor: '#47C2D0',
-  //           width: '5%',
-  //           borderTopLeftRadius: 20,
-  //           borderBottomLeftRadius: 20,
-  //           borderWidth: 2,
-  //           borderColor: 'white',
-  //         }}
-  //       />
-
-  //       <View
-  //         style={{
-  //           display: 'flex',
-  //           flexDirection: 'column',
-  //           justifyContent: 'flex-start',
-  //           alignItems: 'flex-start',
-  //           paddingHorizontal: 15,
-  //           paddingVertical: 10,
-  //           width: '90%',
-  //         }}>
-  //         <View
-  //           style={{
-  //             display: 'flex',
-  //             flexDirection: 'row',
-  //             justifyContent: 'center',
-  //             alignItems: 'center',
-  //           }}>
-  //           {/* <Image source={university} /> */}
-
-  //           <Text style={{color: 'black', marginBottom: 1, fontSize: 15}}>
-  //             Benguluru University
-  //           </Text>
-  //         </View>
-  //         <View
-  //           style={{
-  //             width: '100%',
-  //             height: 4,
-  //             backgroundColor: 'black',
-  //             marginBottom: 2,
-  //           }}
-  //         />
-  //         {/* <ErrAndSucSt type="success" message="contact is verified" /> */}
-  //       </View>
-  //     </View>
-  //   </View>
-  //   <View
-  //     style={{
-  //       width: '100%',
-  //       display: 'flex',
-  //       flexDirection: 'row',
-  //       justifyContent: 'center',
-  //       alignItems: 'center',
-  //       gap: 8,
-  //     }}>
-  //     <TouchableOpacity
-  //       style={{
-  //         ...BUTTON_STYLE1,
-  //         backgroundColor: '#F0F5FF',
-  //         display: 'flex',
-  //         justifyContent: 'center',
-  //         alignItems: 'center',
-  //         borderRadius: 12,
-  //         borderWidth: 1,
-  //         borderColor: '#5869E6',
-  //         paddingVertical: '3%',
-  //         width: '45%',
-  //       }}
-  //       // onPress={() => setmodalVisible(false)}
-  //       >
-  //       <Text style={{color: '#5869E6', fontSize: 20}}>No</Text>
-  //     </TouchableOpacity>
-  //     <TouchableOpacity
-  //       style={{
-  //         ...BUTTON_STYLE2,
-  //         backgroundColor: '#5869E6',
-  //         display: 'flex',
-  //         justifyContent: 'center',
-  //         alignItems: 'center',
-  //         borderRadius: 8,
-  //         width: '45%',
-  //         paddingVertical: '3%',
-  //       }}
-  //       // onPress={CommonRemoveModal}
-  //       >
-  //       <Text style={{color: 'white', fontSize: 20}}>Yes</Text>
-  //     </TouchableOpacity>
-  //     <CredentialOfferAccept visible={acceptModalVisible} credentialId={credentialId}/>
-  //   </View>
-  // </SafeAreaView>
   )
 }
 

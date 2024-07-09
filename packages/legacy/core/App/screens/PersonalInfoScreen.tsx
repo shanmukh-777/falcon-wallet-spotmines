@@ -8,16 +8,24 @@ import { useNavigation } from '@react-navigation/native'
 import { BUTTON_STYLE2 } from '../constants/fonts';
 import { AuthenticateStackParams, Screens } from '../types/navigators'
 import { StackNavigationProp } from '@react-navigation/stack'
+import { useStore } from '../contexts/store'
+import { useAuth } from '../contexts/auth'
+import { DispatchAction } from '../contexts/reducers/store'
 
 const PersonalInfoScreen = () => {
+    const [store, dispatch] = useStore()
     const [phoneNumberValue, setPhoneNumberValue] = useState('');
     const [nameValue, setNameValue] = useState('');
     const [isKeyboardVisible, setKeyboardVisible] = useState(false);
     const navigation = useNavigation<StackNavigationProp<AuthenticateStackParams>>();
+    const [biometryEnabled, setBiometryEnabled] = useState(store.preferences.useBiometry)
+    const [continueEnabled, setContinueEnabled] = useState(true)
 
     const screenHeight = Math.round(Dimensions.get('window').height);
     const [isPhoneNumberValid, setIsPhoneNumberValid] = useState(false);
     const [isFocused, setIsFocused] = useState(false);
+    const { isBiometricsActive, commitPIN, disableBiometrics } = useAuth()
+
     // const navigation = useNavigation();
 
     useEffect(() => {
@@ -67,7 +75,21 @@ const PersonalInfoScreen = () => {
     const getFontSize = () => {
         return screenHeight < 600 ? screenHeight * 0.015 : screenHeight * 0.017;
     };
-
+    const onSubmitPressed = async() => {
+        setContinueEnabled(false)
+    
+        await commitPIN(biometryEnabled)
+        dispatch({
+          type: DispatchAction.DID_AGREE_TO_TERMS,
+        })
+        dispatch({
+          type: DispatchAction.USE_BIOMETRY,
+          payload: [biometryEnabled],
+        })
+    
+        // navigation.navigate(Screens.CreatePIN)
+        // navigation.navigate(Screens.UseBiometry)
+      }
 
 
     return (
@@ -101,7 +123,7 @@ const PersonalInfoScreen = () => {
                             backgroundColor: isPhoneNumberValid && nameValue.trim() !== '' ? '#5869E6' : '#CBCBCC', ...BUTTON_STYLE2
                         }}
                         disabled={!isPhoneNumberValid || nameValue.trim() === ''}
-                        onPress={() => { navigation.navigate(Screens.OtpScreen) }}
+                        onPress={onSubmitPressed}
                     >
                         <Text  style={{ fontSize: getFontSizel(),color:isPhoneNumberValid && nameValue.trim()?'white':'#454545' }}>Confirm</Text>
                     </TouchableOpacity>

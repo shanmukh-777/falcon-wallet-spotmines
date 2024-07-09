@@ -10,8 +10,10 @@ import Button, { ButtonType } from '../components/buttons/Button'
 import { useAnimatedComponents } from '../contexts/animated-components'
 import { useConfiguration } from '../contexts/configuration'
 import { useTheme } from '../contexts/theme'
-import { Screens, TabStacks } from '../types/navigators'
+import { HomeStackParams, RootStackParams, Screens, Stacks, TabStackParams, TabStacks } from '../types/navigators'
 import { testIdWithKey } from '../utils/testable'
+import { StackNavigationProp } from '@react-navigation/stack'
+import TabStack from 'navigators/TabStack'
 
 enum DeliveryStatus {
   Pending,
@@ -31,7 +33,8 @@ const CredentialOfferAccept: React.FC<CredentialOfferAcceptProps> = ({ visible, 
   const [timerDidFire, setTimerDidFire] = useState<boolean>(false)
   const [timer, setTimer] = useState<NodeJS.Timeout>()
   const credential = useCredentialById(credentialId)
-  const navigation = useNavigation()
+  // const navigation = useNavigation()
+  const navigation = useNavigation<StackNavigationProp<TabStackParams>>()
   const { ListItems } = useTheme()
   const { CredentialAdded, CredentialPending } = useAnimatedComponents()
   const { connectionTimerDelay } = useConfiguration()
@@ -67,7 +70,9 @@ const CredentialOfferAccept: React.FC<CredentialOfferAcceptProps> = ({ visible, 
   }
 
   const onBackToHomeTouched = () => {
-    navigation.getParent()?.navigate(TabStacks.HomeStack, { screen: Screens.Home })
+    navigation.navigate(TabStacks.CredentialStack,{screen:Screens.ListCredentials})
+    // navigation.getParent()?.navigate(TabStacks.CredentialStack, { screen: Screens.Credentials })
+
   }
 
   const onDoneTouched = () => {

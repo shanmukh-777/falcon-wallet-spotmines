@@ -38,7 +38,7 @@ const BaseToast: React.FC<BaseToastProps> = ({ title, body, toastType, onPress =
       flexDirection: 'row',
       marginTop: 25,
       borderWidth,
-      borderRadius,
+      borderRadius:20
     },
     textContainer: {
       flexShrink: 1,
@@ -58,35 +58,54 @@ const BaseToast: React.FC<BaseToastProps> = ({ title, body, toastType, onPress =
   })
   switch (toastType) {
     case ToastType.Success:
-      iconName = 'check-circle'
-      backgroundColor = ColorPallet.notification.success
-      borderColor = ColorPallet.notification.successBorder
-      iconColor = ColorPallet.notification.successIcon
-      textColor = ColorPallet.notification.successText
+      iconName = 'check-circle-outline'
+      // backgroundColor = ColorPallet.notification.success
+      // borderColor = ColorPallet.notification.successBorder
+      // iconColor = ColorPallet.notification.successIcon
+      // textColor = ColorPallet.notification.successText
+      iconName = 'error',
+      backgroundColor='#F0F5FF',
+      borderColor='#F0F5FF',
+      iconColor='#5869E6'
+      textColor='#5869E6'
       break
 
     case ToastType.Info:
-      iconName = 'info'
-      backgroundColor = ColorPallet.notification.info
-      borderColor = ColorPallet.notification.infoBorder
-      iconColor = ColorPallet.notification.infoIcon
-      textColor = ColorPallet.notification.infoText
+      iconName = 'info-outline'
+      // backgroundColor = ColorPallet.notification.info
+      // borderColor = ColorPallet.notification.infoBorder
+      // iconColor = ColorPallet.notification.infoIcon
+      // textColor = ColorPallet.notification.infoText
+      iconName = 'error',
+      backgroundColor='#ced9ed',
+      borderColor='#ced9ed',
+      iconColor='#5869E6'
+      textColor='#5869E6'
       break
 
     case ToastType.Warn:
-      iconName = 'report-problem'
-      backgroundColor = ColorPallet.notification.warn
-      borderColor = ColorPallet.notification.warnBorder
-      iconColor = ColorPallet.notification.warnIcon
-      textColor = ColorPallet.notification.warnText
+      iconName = 'report-gmailerrorred'
+      // backgroundColor = ColorPallet.notification.warn
+      // borderColor = ColorPallet.notification.warnBorder
+      // iconColor = ColorPallet.notification.warnIcon
+      // textColor = ColorPallet.notification.warnText
+      // iconName = 'error',
+      backgroundColor='#F0F5FF',
+      borderColor='#F0F5FF',
+      iconColor='#5869E6'
+      textColor='#5869E6'
       break
 
     case ToastType.Error:
-      iconName = 'error'
-      backgroundColor = ColorPallet.notification.error
-      borderColor = ColorPallet.notification.errorBorder
-      iconColor = ColorPallet.notification.errorIcon
-      textColor = ColorPallet.notification.errorText
+      iconName = 'error-outline',
+      // backgroundColor = ColorPallet.notification.error
+      // borderColor = ColorPallet.notification.errorBorder
+      backgroundColor='#f2dcdc',
+      borderColor='#f2dcdc',
+      // iconColor = ColorPallet.notification.errorIcon
+      iconColor='#5869E6'
+      // textColor = ColorPallet.notification.errorText
+      textColor='#5869E6'
       break
 
     default:

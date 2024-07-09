@@ -1,15 +1,21 @@
 import { StackScreenProps } from '@react-navigation/stack'
-import React, { useRef } from 'react'
+import React, { useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import {
+  Button,
+  DeviceEventEmitter,
+  Dimensions,
+  Modal,
   ScrollView,
   SectionList,
   StyleSheet,
   Text,
+  TextStyle,
   TouchableOpacity,
   TouchableWithoutFeedback,
   View,
 } from 'react-native'
+
 import { getVersion, getBuildNumber } from 'react-native-device-info'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import Icon from 'react-native-vector-icons/MaterialIcons'
@@ -26,6 +32,15 @@ import { SettingIcon, SettingSection } from '../types/settings'
 import { testIdWithKey } from '../utils/testable'
 import AppbarSettings from  '../components/falcon/AppbarSettings'
 import SettingsCard from '../components/falcon/SettingsCard'
+import { EventTypes } from '../constants'
+import { FONT_STYLE_3 } from '../constants/fonts'
+import Ant from 'react-native-vector-icons/AntDesign'
+import Oct from 'react-native-vector-icons/Octicons'
+import FeatherIcon from 'react-native-vector-icons/Feather'
+import { useAgent } from '@aries-framework/react-hooks'
+import Toast from 'react-native-toast-message'
+import { ToastType } from '../components/toast/BaseToast'
+import { DownloadDirectoryPath } from 'react-native-fs'
 
 type SettingsProps = StackScreenProps<SettingStackParams>
 
@@ -79,6 +94,92 @@ const Settings: React.FC<SettingsProps> = ({ navigation }) => {
       marginVertical: 25,
       alignItems: 'center',
     },
+    modalContainer: {
+      flex: 1,
+      justifyContent: 'center',
+      alignItems: 'center',
+      backgroundColor: 'rgba(0,0,0,0.5)',
+    },
+    modalContent: {
+      backgroundColor: 'white',
+      padding: 20,
+      borderRadius: 10,
+      alignItems: 'center',
+    },
+    closeButton: {
+      marginTop: 20,
+      padding: 10,
+      backgroundColor: 'red',
+      borderRadius: 5,
+    },
+    closeButtonText: {
+      color: 'white',
+    },
+    containerm: {
+      flex: 1,
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
+    toggleButton: {
+      padding: 10,
+      backgroundColor: '#2196F3',
+      borderRadius: 5,
+    },
+    toggleButtonText: {
+      color: '#fff',
+      fontSize: 16,
+    },
+    modalOverlay: {
+      flex: 1,
+      backgroundColor: 'rgba(0, 0, 0, 0.5)',
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
+    modalContentm: {
+      width: 300,
+      backgroundColor: '#fff',
+      borderRadius: 10,
+      padding: 20,
+      alignItems: 'center',
+    },
+    modalTitle: {
+      fontSize: 18,
+      fontWeight: 'bold',
+      marginBottom: 20,
+    },
+    iconRow: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      marginVertical: 5,
+    },
+    iconText: {
+      marginLeft: 10,
+      fontSize: 16,
+    },
+    viewPhraseText: {
+      color: '#2196F3',
+      marginVertical: 20,
+    },
+    buttonRow: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      width: '100%',
+    },
+    localBackupButton: {
+      padding: '4%',
+      borderWidth: 1,
+      borderColor: '#5869E6',
+      borderRadius: 10,
+      marginRight: 10,
+    },
+    cloudBackupButton: {
+      padding: '4%',
+      borderWidth: 1,
+      borderColor: '#2196F3',
+      borderRadius: 10,
+      backgroundColor:'#5869E6',
+      marginRight: 10,
+    }
   })
 
   const currentLanguage = i18n.t('Language.code', { context: i18n.language as Locales })
@@ -320,6 +421,63 @@ const Settings: React.FC<SettingsProps> = ({ navigation }) => {
       </TouchableOpacity>
     </ScrollView>
   )
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [toggleState, setToggleState] = useState(false);
+  
+  const handleTogglePress = () => {
+    setToggleState(!toggleState);
+    setIsModalVisible(true);
+  };
+  
+  const handleCloseModal = () => {
+    setToggleState(false);
+    setIsModalVisible(false);
+  };
+
+  const [showDisclosureModal, setShowDisclosureModal] = useState<boolean>(false)
+
+  const recoveryPhraseRef = useRef();
+  const [copied, setCopied] = useState(false);
+  const RNFS = require('react-native-fs')
+  const [loading, setLoading] = useState(false)
+  const { agent } = useAgent()
+  const [randomWords, setRandomWords] = useState('hello world 123 567')
+
+
+  const exportWallet = async () => {
+    if (agent) {
+      const backupKey = randomWords
+      const random = Date.now()
+      const backupWalletName = `falconBackup-${random}`//present date and time
+      // const path = `${RNFS.DocumentDirectoryPath}/${backupWalletName}`
+      // const path = `${RNFS.ExternalStorageDirectoryPath}/${backupWalletName}`
+      const path=`${DownloadDirectoryPath}/${backupWalletName}`
+  
+      console.log('newAgent.wallet', agent.wallet.export, path, agent.config.walletConfig)
+
+      agent.wallet
+        .export({ path: path, key: backupKey })
+        .then((res) => {
+          Toast.show({
+            type: ToastType.Success,
+            text1: 'Wallet exported successfully',
+            text2: path,
+            visibilityTime: 3000,
+            position: 'bottom',
+          })
+        })
+        .catch((err) => {
+          console.log('err', err)
+        })
+    }
+  }
+
+
+const screenHeight = Math.round(Dimensions.get('window').height)
+
+const getFontSizel = () => {
+  return screenHeight < 600? screenHeight * 0.016 : screenHeight * 0.018
+}
 
   return (
     // <SafeAreaView style={styles.container} edges={['bottom', 'left', 'right']}>
@@ -385,13 +543,14 @@ const Settings: React.FC<SettingsProps> = ({ navigation }) => {
     ?.navigate(Stacks.SettingStack, { screen: Screens.CreatePIN, params: { updatePin: true }})}>
   <SettingsCard icon={true} heading={"Change PIN"} context={"Edit and reset your PIN"} />
 </TouchableOpacity>
-<TouchableOpacity onPress={ () =>navigation.navigate(Screens.UseBiometry)}>
+
+
   <SettingsCard icon={false} heading={"Biometrics"} context={"Enable biometrics"} />
-</TouchableOpacity>
-<TouchableOpacity >
-  <SettingsCard icon={false} heading={"Backup"} context={"Backup your wallet to cloud"} />
-</TouchableOpacity>
-<TouchableOpacity onPress={ () =>navigation
+  
+  <SettingsCard icon={false} heading={"Backup"} context={"Backup your wallet to cloud"} onToggle={handleTogglePress}/>
+
+
+  <TouchableOpacity onPress={ () =>navigation
     .getParent()
     ?.navigate(Stacks.SettingStack, { screen: Screens.RecoveryPhraseScreen})}>
   <SettingsCard icon={true} heading={"Recovery phrase"} context={"Recovery phrase to restore your wallet"} />
@@ -401,10 +560,78 @@ const Settings: React.FC<SettingsProps> = ({ navigation }) => {
     ?.navigate(Stacks.SettingStack, { screen: Screens.SupportScreen})}>
   <SettingsCard icon={true} heading={"Help"} context={"Support and FAQ"} />
 </TouchableOpacity>
-<TouchableOpacity >
+<TouchableOpacity  onPress={ () =>navigation
+    .getParent()
+    ?.navigate(Stacks.SettingStack, { screen: Screens.Networks})}>
   <SettingsCard icon={true} heading={"Network"} context={"Network"} />
 </TouchableOpacity>
+<Modal
+        visible={isModalVisible}
+        animationType="slide"
+        transparent={true}
+        onRequestClose={handleCloseModal}
+        style={{ shadowColor: '#212228', shadowOffset: { width: 0, height: 4, }, shadowOpacity: 0.1,shadowRadius: 12, elevation: 4,}}
+      >
+        <View style={{flex:1,justifyContent:'center',alignItems:'center'}}>
+          <View style={{width:'80%',backgroundColor:'white',borderRadius:10,padding:'3%',display:'flex',alignContent:'center'}}>
+            <Text style={{  fontSize: 18,fontWeight: 'bold',color:'black',marginBottom: 20,}}>Backing up your wallet</Text>
+            <View style={{ flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center', gap: 2, marginBottom: '5%' }}>
+        <View style={{ borderRadius: 100 ,backgroundColor: '#F0F5FF', padding: screenHeight < 600? 2 : 4 }}>
+          
+          {/* <Image source={Logo} resizeMode="contain" style={styles.imagestyle} /> */}
+          <Oct  name="person" size={24} color="#733DF5" />
+
+        </View>
+        <Text style={[FONT_STYLE_3 as TextStyle, {fontSize: getFontSizel(), color: 'black' }]}>Easily recover your digital identity.</Text>
+
+      </View>
+      <View style={{ flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center', gap: 2, marginBottom: '5%' }}>
+        <View style={{ borderRadius: 100 ,backgroundColor: '#F0F5FF', padding: screenHeight < 600? 2 : 4 }}>
+          
+          {/* <Image source={Logo} resizeMode="contain" style={styles.imagestyle} /> */}
+          <Ant  name="clouduploado" size={24} color="#733DF5" />
+
+        </View>
+        <Text style={[FONT_STYLE_3 as TextStyle, {fontSize: getFontSizel(), color: 'black' }]}>Backup to your Google Cloud or iCloud.</Text>
+
+      </View>
+      <View style={{ flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center', gap: 2, marginBottom: '5%' }}>
+        <View style={{ borderRadius: 100 ,backgroundColor: '#F0F5FF', padding: screenHeight < 600? 2 : 4 }}>
+          
+          {/* <Image source={Logo} resizeMode="contain" style={styles.imagestyle} /> */}
+          <FeatherIcon name="eye-off" size={24} color="#733DF5" />
+
+        </View>
+        <Text style={[FONT_STYLE_3 as TextStyle, {fontSize: getFontSizel(), color: 'black' }]}>Only you have access to your identity.</Text>
+
+      </View>
+            
+           
+            <TouchableOpacity onPress={()=>{navigation.navigate(Screens.RecoveryPhraseScreen)}}>
+              <Text style={{textAlign:'center',color:'blue',fontSize:16,paddingTop:'10%',paddingBottom:'10%'}}>View phrase</Text>
+            </TouchableOpacity>
+            <View style={styles.buttonRow}>
+              <TouchableOpacity style={styles.localBackupButton} onPress={exportWallet}>
+                <Text style={{color:'#5869E6',fontSize:16}}>Local backup</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.cloudBackupButton}>
+                <Text style={{color:'white',fontSize:16}}>Cloud backup</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </Modal>
+
+
 </ScrollView>
+
+
+
+
+
+
+
+
   )
 }
 
