@@ -16,9 +16,9 @@ Join us as we work towards a future where verifiable credentials are easily acce
 
 Currently, we're updating Bifold's architecture to make it easier to maintain and customize for various use cases. Check out our [design roadmap issue](https://github.com/hyperledger/aries-mobile-agent-react-native/issues/754) for more information, and we welcome your feedback.
 
-### To get started
+# To get started
 
-# ----------->>>> required :
+### ----------->>>> required :
 
   node 18.18.2
   
@@ -26,7 +26,7 @@ Currently, we're updating Bifold's architecture to make it easier to maintain an
   
   npm 9
 
-# ----------->>>>  steps:
+### ----------->>>>  steps:
 
   1: Execute command : yarn install in root folder
   
@@ -36,7 +36,7 @@ Currently, we're updating Bifold's architecture to make it easier to maintain an
   
   4: Start metro server at pckages/legacy/app by running react-native start --reset-cache
 
-# ----------->>>>  build commands:
+### ----------->>>>  build commands:
 
 To run the project: react-native start --reset-cache
 
