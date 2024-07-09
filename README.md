@@ -28,7 +28,7 @@ Currently, we're updating Bifold's architecture to make it easier to maintain an
 
 ### ----------->>>>  steps:
 
-  1: Execute command : yarn install in root folder
+  1: Execute command in root folder: yarn install 
   
   2: Execute command:  yarn run  build 
 
