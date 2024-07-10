@@ -22,12 +22,18 @@ Currently, we're updating Bifold's architecture to make it easier to maintain an
 
   node 18.18.2
 
+  npm 9
+
   react native --global
   -->> to install : npm i react-native -g
   
-  jdk 17 or above
-  
-  npm 9
+  jdk 17 
+  -->> to install :  sudo apt-get install openjdk-17-jdk -y
+
+  ### export path:
+
+  export JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64
+  export PATH=$JAVA_HOME/bin:$PATH
 
 ### ----------->>>>  steps:
 
