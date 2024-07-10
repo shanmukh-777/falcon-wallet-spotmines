@@ -33,6 +33,7 @@ Currently, we're updating Bifold's architecture to make it easier to maintain an
   ### export path:
 
   export JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64
+  
   export PATH=$JAVA_HOME/bin:$PATH
 
 ### ----------->>>>  steps:
