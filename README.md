@@ -21,6 +21,9 @@ Currently, we're updating Bifold's architecture to make it easier to maintain an
 ### ----------->>>> required :
 
   node 18.18.2
+
+  react native --global
+  -->> to install : npm i react-native -g
   
   jdk 17 or above
   
@@ -40,7 +43,7 @@ Currently, we're updating Bifold's architecture to make it easier to maintain an
 
 To run the project: react-native start --reset-cache
 
-To clean the previous build:  ./gradlew clean
+To clean the previous build,run inside packages/legacy/app/android:  ./gradlew clean
 
 To build an apk in release version: ./gradlew assembleRelease
 
